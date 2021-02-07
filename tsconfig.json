@@ -3,9 +3,7 @@
     "strict": true,
     "jsx": "preserve",
     "esModuleInterop": true,
-    "lib": [
-      "ESNext"
-    ],
+    "lib": ["ESNext"],
     "target": "es5",
     "allowJs": true,
     "skipLibCheck": true,
@@ -16,12 +14,6 @@
     "resolveJsonModule": true,
     "isolatedModules": true
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "next.config.js"],
+  "exclude": ["node_modules"]
 }

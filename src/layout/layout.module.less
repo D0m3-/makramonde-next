@@ -1,0 +1,42 @@
+@import '../makramonde.less';
+
+.content {
+  padding: @padding-lg 0;
+}
+
+.header {
+  position: relative;
+  z-index: 3;
+}
+
+.sider {
+  display: none;
+}
+
+.footer {
+  position: relative;
+  z-index: 3;
+  width: 100%;
+  text-align: center;
+  font-size: 10px;
+}
+
+.arrows {
+  display: none;
+  position: relative;
+  z-index: 2; //antd weird overlay
+}
+
+.alert {
+  width: 100%;
+  text-align: center;
+}
+
+@media (min-width: @screen-md-min) {
+  .sider {
+    display: block;
+  }
+  .arrows {
+    display: block;
+  }
+}
