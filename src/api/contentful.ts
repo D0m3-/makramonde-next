@@ -19,6 +19,14 @@ export const fetchContentPages = async () => {
   return { contentPages: entries.items };
 };
 
+export const fetchProductPages = async () => {
+  const entries = await client.getEntries({
+    content_type: 'page',
+    'fields.tag': 'products',
+  });
+  return { productPages: entries.items };
+};
+
 export const fetchPage = async ({ slug }) => {
   const entries = await client.getEntries({
     content_type: 'page',
@@ -37,9 +45,14 @@ export const fetchLayout = async () => {
   return { navBar: entries.items[0], products };
 };
 
-const fetchProducts = async () => {
+export const fetchProducts = async () => {
   const entries = await client.getEntries({
     content_type: 'uniqueProduct',
   });
   return { products: entries.items };
+};
+
+export const fetchProduct = async ({ id }) => {
+  const entry = await client.getEntry(id);
+  return { product: entry };
 };

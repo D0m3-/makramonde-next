@@ -28,14 +28,14 @@ const SiteLayout = ({ children, layout, page }) => {
         className={styles.sider}
         trigger={null}
       >
-        <SiteSider slug={page.fields.slug} layout={layout} />
+        <SiteSider slug={page?.fields.slug} layout={layout} />
       </Sider>
       <Layout>
         <Header theme="light" className={styles.header}>
           <SiteHeader
-            pageTitle={page.fields.title}
+            pageTitle={page?.fields.title}
             layout={layout}
-            slug={page.fields.slug}
+            slug={page?.fields.slug}
           />
         </Header>
         {PROMO_MESSAGE && (

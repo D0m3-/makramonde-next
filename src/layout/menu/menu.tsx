@@ -6,7 +6,7 @@ import styles from './menu.module.less';
 
 const { SubMenu } = AntdMenu;
 
-const getProductUrl = () => {};
+const getProductUrl = (product) => product.sys.id;
 
 const Menu = ({ layout, slug, onSelect }) => {
   const [search, setSearch] = useState('');
@@ -27,8 +27,8 @@ const Menu = ({ layout, slug, onSelect }) => {
       return categories;
     }
     product.fields.categories.forEach((category) => {
-      categories[category] = {
-        ...categories[category],
+      categories[category.fields.name] = {
+        ...categories[category.fields.name],
         [product.fields.title]: getProductUrl(product),
       };
     });
@@ -49,6 +49,10 @@ const Menu = ({ layout, slug, onSelect }) => {
   const onChange = (e) => {
     setSearch(e.target.value);
   };
+
+  const productSlug = layout.navBar.fields.links.find(
+    (link) => link.fields.tag == 'products'
+  ).fields.slug;
   return (
     <div>
       <Input.Search
@@ -89,7 +93,11 @@ const Menu = ({ layout, slug, onSelect }) => {
                 .sort()
                 .map((name) => (
                   <AntdMenu.Item key={categories[category][name]}>
-                    <Link href={categories[category][name] || ''}>
+                    <Link
+                      href={
+                        productSlug + '/' + categories[category][name] || ''
+                      }
+                    >
                       <a>{name}</a>
                     </Link>
                   </AntdMenu.Item>
