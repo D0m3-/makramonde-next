@@ -9,17 +9,37 @@ const client = contentful.createClient({
   environment,
 });
 
-export const fetchHome = async () => {
+export const fetchHome = async () => fetchPage({ slug: '/' });
+
+export const fetchContentPages = async () => {
   const entries = await client.getEntries({
     content_type: 'page',
-    'fields.slug': '/',
+    'fields.tag': 'content',
+  });
+  return { contentPages: entries.items };
+};
+
+export const fetchPage = async ({ slug }) => {
+  const entries = await client.getEntries({
+    content_type: 'page',
+    'fields.slug': slug,
   });
   return { page: entries.items[0] };
 };
 
-export const fetchNavBar = async () => {
+export const fetchLayout = async () => {
+  const [entries, { products }] = await Promise.all([
+    client.getEntries({
+      content_type: 'navBar',
+    }),
+    fetchProducts(),
+  ]);
+  return { navBar: entries.items[0], products };
+};
+
+const fetchProducts = async () => {
   const entries = await client.getEntries({
-    content_type: 'navBar',
+    content_type: 'uniqueProduct',
   });
-  return { navBar: entries.items[0] };
+  return { products: entries.items };
 };

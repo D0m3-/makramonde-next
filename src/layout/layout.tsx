@@ -9,7 +9,7 @@ const { Header, Content, Footer, Sider } = Layout;
 
 const PROMO_MESSAGE = '';
 
-const SiteLayout = ({ children, title, location }) => {
+const SiteLayout = ({ children, layout, page }) => {
   const DEFAULT_COL_PROPS = {
     xs: { span: 22, offset: 1 },
     sm: { span: 20, offset: 2 },
@@ -28,11 +28,15 @@ const SiteLayout = ({ children, title, location }) => {
         className={styles.sider}
         trigger={null}
       >
-        <SiteSider location={location} />
+        <SiteSider slug={page.fields.slug} layout={layout} />
       </Sider>
       <Layout>
         <Header theme="light" className={styles.header}>
-          <SiteHeader pageTitle={title} location={location} />
+          <SiteHeader
+            pageTitle={page.fields.title}
+            layout={layout}
+            slug={page.fields.slug}
+          />
         </Header>
         {PROMO_MESSAGE && (
           <Alert

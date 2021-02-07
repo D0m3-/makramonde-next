@@ -1,16 +1,22 @@
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import { GetStaticProps } from 'next';
 import React from 'react';
-import { fetchHome } from '../src/api/contentful';
+import { fetchHome, fetchLayout } from '../src/api/contentful';
 import SiteLayout from '../src/layout/layout';
 
-const Home = ({ content }) => {
-  return <SiteLayout>{documentToReactComponents(content)}</SiteLayout>;
+const Home = ({ page, layout }) => {
+  return (
+    <SiteLayout layout={layout} page={page}>
+      {documentToReactComponents(page.fields.content)}
+    </SiteLayout>
+  );
 };
 
 export const getStaticProps: GetStaticProps = async (context) => {
-  const { page } = await fetchHome();
-  return { props: { content: page.fields.content } };
+  const [{ page }, layout] = await Promise.all([fetchHome(), fetchLayout()]);
+  return {
+    props: { page, layout },
+  };
 };
 
 export default Home;

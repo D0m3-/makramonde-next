@@ -6,7 +6,7 @@ import styles from './header.module.less';
 
 const isTest = process.env.STRIPE_ENV === 'test';
 
-const SiteHeader = ({ pageTitle, location }) => {
+const SiteHeader = ({ pageTitle, layout, slug }) => {
   const [isMenuOpen, setMenuOpen] = useState();
   return (
     <div className={styles.container}>
@@ -21,7 +21,11 @@ const SiteHeader = ({ pageTitle, location }) => {
           footer={null}
         >
           logo
-          <SiteMenu location={location} onSelect={() => setMenuOpen(false)} />
+          <SiteMenu
+            slug={slug}
+            layout={layout}
+            onSelect={() => setMenuOpen(false)}
+          />
         </Modal>
       </div>
 

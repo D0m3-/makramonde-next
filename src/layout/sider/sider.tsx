@@ -2,11 +2,11 @@ import React from 'react';
 import SiteMenu from '../menu/menu';
 import styles from './sider.module.less';
 
-const SiteSider = ({ location }) => {
+const SiteSider = ({ layout, slug }) => {
   return (
     <>
       <div className={styles.container}>logo</div>
-      <SiteMenu location={location} />
+      <SiteMenu slug={slug} layout={layout} />
     </>
   );
 };

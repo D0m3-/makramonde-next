@@ -1,9 +1,4 @@
-import {
-  FileTextOutlined,
-  HomeOutlined,
-  MessageOutlined,
-  TagsOutlined,
-} from '@ant-design/icons';
+import { TagsOutlined } from '@ant-design/icons';
 import { Input, Menu as AntdMenu } from 'antd';
 import Link from 'next/link';
 import React, { useState } from 'react';
@@ -13,32 +8,44 @@ const { SubMenu } = AntdMenu;
 
 const getProductUrl = () => {};
 
-const Menu = ({ data, location, onSelect }) => {
+const Menu = ({ layout, slug, onSelect }) => {
   const [search, setSearch] = useState('');
   const autres = [];
-  const categories = data?.reduce((categories, product) => {
+  const categories = layout.products?.reduce((categories, product) => {
     if (
       search.length &&
-      !product.name.toLowerCase().includes(search.toLowerCase()) &&
+      !product.fields.title.toLowerCase().includes(search.toLowerCase()) &&
       !(
-        product.description &&
-        product.description.toLowerCase().includes(search.toLowerCase())
+        product.fields.description &&
+        product.fields.description.toLowerCase().includes(search.toLowerCase())
       )
     ) {
       return categories;
     }
-    if (!product.categories?.length) {
-      autres[product.name] = getProductUrl(product);
+    if (!product.fields.categories?.length) {
+      autres[product.fields.title] = getProductUrl(product);
       return categories;
     }
-    product.categories.forEach((category) => {
+    product.fields.categories.forEach((category) => {
       categories[category] = {
         ...categories[category],
-        [product.name]: getProductUrl(product),
+        [product.fields.title]: getProductUrl(product),
       };
     });
     return categories;
   }, {});
+
+  const items = layout.navBar.fields.links.reduce((items, link) => {
+    if (link.fields.tag == 'products') {
+      return items.concat(categories);
+    }
+    return items.concat([
+      {
+        slug: link.fields.slug,
+        title: link.fields.title,
+      },
+    ]);
+  }, []);
   const onChange = (e) => {
     setSearch(e.target.value);
   };
@@ -52,20 +59,20 @@ const Menu = ({ data, location, onSelect }) => {
       />
       <AntdMenu
         defaultSelectedKeys={['1']}
-        selectedKeys={[location?.pathname]}
+        selectedKeys={[slug]}
         mode="inline"
         className={styles.menu}
         onClick={onSelect}
         forceSubMenuRender
       >
-        <AntdMenu.Item key="/">
-          <Link href="/">
-            <>
-              <HomeOutlined />
-              Accueil
-            </>
-          </Link>
-        </AntdMenu.Item>
+        {items.map((item) => (
+          <AntdMenu.Item key="/">
+            <Link href={item.slug || ''}>
+              <a>{item.title}</a>
+            </Link>
+          </AntdMenu.Item>
+        ))}
+
         {Object.keys(categories || {})
           .sort()
           .map((category) => (
@@ -82,7 +89,9 @@ const Menu = ({ data, location, onSelect }) => {
                 .sort()
                 .map((name) => (
                   <AntdMenu.Item key={categories[category][name]}>
-                    <Link href={categories[category][name]}>{name}</Link>
+                    <Link href={categories[category][name] || ''}>
+                      <a>{name}</a>
+                    </Link>
                   </AntdMenu.Item>
                 ))}
             </SubMenu>
@@ -101,26 +110,13 @@ const Menu = ({ data, location, onSelect }) => {
               .sort()
               .map((name) => (
                 <AntdMenu.Item key={autres[name]}>
-                  <Link href={autres[name]}>{name}</Link>
+                  <Link href={autres[name] || ''}>
+                    <a>{name}</a>
+                  </Link>
                 </AntdMenu.Item>
               ))}
           </SubMenu>
         )}
-        <AntdMenu.Item key="/contact">
-          <Link href={'/contact'}>
-            <>
-              <MessageOutlined />À propos
-            </>
-          </Link>
-        </AntdMenu.Item>
-        <AntdMenu.Item key="/legal">
-          <Link href={'/legal'}>
-            <>
-              <FileTextOutlined />
-              Légal
-            </>
-          </Link>
-        </AntdMenu.Item>
       </AntdMenu>
     </div>
   );
