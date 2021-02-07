@@ -31,7 +31,7 @@ const SiteLayout = ({ children, layout, page }) => {
         <SiteSider slug={page?.fields.slug} layout={layout} />
       </Sider>
       <Layout>
-        <Header theme="light" className={styles.header}>
+        <Header className={styles.header}>
           <SiteHeader
             pageTitle={page?.fields.title}
             layout={layout}

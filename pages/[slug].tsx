@@ -23,13 +23,13 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }));
   return {
     paths,
-    fallback: true,
+    fallback: false,
   };
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const [{ page }, layout] = await Promise.all([
-    fetchPage({ slug: params.slug }),
+    fetchPage({ slug: params?.slug }),
     fetchLayout(),
   ]);
   return {

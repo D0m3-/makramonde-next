@@ -10,7 +10,7 @@ const getProductUrl = (product) => product.sys.id;
 
 const Menu = ({ layout, slug, onSelect }) => {
   const [search, setSearch] = useState('');
-  const autres = [];
+  const autres = [] as any;
   const categories = layout.products?.reduce((categories, product) => {
     if (
       search.length &&
@@ -26,7 +26,7 @@ const Menu = ({ layout, slug, onSelect }) => {
       autres[product.fields.title] = getProductUrl(product);
       return categories;
     }
-    product.fields.categories.forEach((category) => {
+    product.fields.categories?.forEach((category) => {
       categories[category.fields.name] = {
         ...categories[category.fields.name],
         [product.fields.title]: getProductUrl(product),
@@ -118,7 +118,7 @@ const Menu = ({ layout, slug, onSelect }) => {
               .sort()
               .map((name) => (
                 <AntdMenu.Item key={autres[name]}>
-                  <Link href={autres[name] || ''}>
+                  <Link href={productSlug + '/' + autres[name] || ''}>
                     <a>{name}</a>
                   </Link>
                 </AntdMenu.Item>

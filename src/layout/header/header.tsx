@@ -7,7 +7,7 @@ import styles from './header.module.less';
 const isTest = process.env.STRIPE_ENV === 'test';
 
 const SiteHeader = ({ pageTitle, layout, slug }) => {
-  const [isMenuOpen, setMenuOpen] = useState();
+  const [isMenuOpen, setMenuOpen] = useState(false);
   return (
     <div className={styles.container}>
       <div className={styles.menu}>

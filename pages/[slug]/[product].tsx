@@ -11,7 +11,7 @@ import SiteLayout from '../../src/layout/layout';
 
 const ProductPage = ({ product, layout }) => {
   return (
-    <SiteLayout layout={layout}>
+    <SiteLayout layout={layout} page={undefined}>
       {documentToReactComponents(product.fields.description)}
     </SiteLayout>
   );
@@ -36,18 +36,18 @@ export const getStaticPaths: GetStaticPaths = async () => {
       ),
     []
   );
-
   return {
     paths,
-    fallback: true,
+    fallback: false,
   };
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const [{ product }, layout] = await Promise.all([
-    fetchProduct({ id: params.product }),
+    fetchProduct({ id: params?.product }),
     fetchLayout(),
   ]);
+
   return {
     props: { product, layout },
   };

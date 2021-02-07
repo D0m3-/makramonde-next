@@ -6,7 +6,7 @@ const SiteSider = ({ layout, slug }) => {
   return (
     <>
       <div className={styles.container}>logo</div>
-      <SiteMenu slug={slug} layout={layout} />
+      <SiteMenu slug={slug} layout={layout} onSelect={undefined} />
     </>
   );
 };
