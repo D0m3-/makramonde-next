@@ -1,58 +1,35 @@
 import { TagsOutlined } from '@ant-design/icons';
 import { Input, Menu as AntdMenu } from 'antd';
+import { Entry } from 'contentful';
 import Link from 'next/link';
 import React, { useState } from 'react';
+import { IUniqueProductFields } from '../../../@types/generated/contentful';
+import {
+  layoutProductsToCategories,
+  layoutToMenu,
+} from '../../transform/layoutTransform';
+import Layout from '../type/Layout';
 import styles from './menu.module.less';
 
 const { SubMenu } = AntdMenu;
 
-const getProductUrl = (product) => product.sys.id;
+const getProductUrl = (product: Entry<IUniqueProductFields>) => product.sys.id;
 
-const Menu = ({ layout, slug, onSelect }) => {
+type Props = {
+  slug: string;
+  layout: Layout;
+  onSelect?: () => void;
+};
+
+const Menu = ({ layout, slug, onSelect }: Props) => {
   const [search, setSearch] = useState('');
-  const autres = [] as any;
-  const categories = layout.products?.reduce((categories, product) => {
-    if (
-      search.length &&
-      !product.fields.title.toLowerCase().includes(search.toLowerCase()) &&
-      !(
-        product.fields.description &&
-        product.fields.description.toLowerCase().includes(search.toLowerCase())
-      )
-    ) {
-      return categories;
-    }
-    if (!product.fields.categories?.length) {
-      autres[product.fields.title] = getProductUrl(product);
-      return categories;
-    }
-    product.fields.categories?.forEach((category) => {
-      categories[category.fields.name] = {
-        ...categories[category.fields.name],
-        [product.fields.title]: getProductUrl(product),
-      };
-    });
-    return categories;
-  }, {});
+  const categories = layoutProductsToCategories({ layout, search });
 
-  const items = layout.navBar.fields.links.reduce((items, link) => {
-    if (link.fields.tag == 'products') {
-      return items.concat(categories);
-    }
-    return items.concat([
-      {
-        slug: link.fields.slug,
-        title: link.fields.title,
-      },
-    ]);
-  }, []);
+  const items = layoutToMenu({ layout });
   const onChange = (e) => {
     setSearch(e.target.value);
   };
 
-  const productSlug = layout.navBar.fields.links.find(
-    (link) => link.fields.tag == 'products'
-  ).fields.slug;
   return (
     <div>
       <Input.Search
@@ -69,61 +46,42 @@ const Menu = ({ layout, slug, onSelect }) => {
         onClick={onSelect}
         forceSubMenuRender
       >
-        {items.map((item) => (
-          <AntdMenu.Item key="/">
-            <Link href={item.slug || ''}>
-              <a>{item.title}</a>
-            </Link>
-          </AntdMenu.Item>
-        ))}
-
-        {Object.keys(categories || {})
-          .sort()
-          .map((category) => (
-            <SubMenu
-              key={category}
-              title={
-                <span>
-                  <TagsOutlined />
-                  <span>{category}</span>
-                </span>
-              }
-            >
-              {Object.keys(categories[category])
-                .sort()
-                .map((name) => (
-                  <AntdMenu.Item key={categories[category][name]}>
-                    <Link
-                      href={
-                        productSlug + '/' + categories[category][name] || ''
-                      }
-                    >
-                      <a>{name}</a>
-                    </Link>
-                  </AntdMenu.Item>
-                ))}
-            </SubMenu>
-          ))}
-        {!!Object.keys(autres).length && (
-          <SubMenu
-            key={'autres'}
-            title={
-              <span>
-                <TagsOutlined />
-                <span>autres</span>
-              </span>
-            }
-          >
-            {Object.keys(autres)
+        {items.map((item) =>
+          item.type === 'products' ? (
+            Object.keys(categories || {})
               .sort()
-              .map((name) => (
-                <AntdMenu.Item key={autres[name]}>
-                  <Link href={productSlug + '/' + autres[name] || ''}>
-                    <a>{name}</a>
-                  </Link>
-                </AntdMenu.Item>
-              ))}
-          </SubMenu>
+              .map((category) => (
+                <SubMenu
+                  key={category}
+                  title={
+                    <span>
+                      <TagsOutlined />
+                      <span>{category}</span>
+                    </span>
+                  }
+                >
+                  {Object.values(categories[category])
+                    .sort()
+                    .map((product) => (
+                      <AntdMenu.Item key={product.sys.id}>
+                        <Link
+                          href={
+                            '/' + item.slug + '/' + getProductUrl(product) || ''
+                          }
+                        >
+                          <a>{product.fields.title}</a>
+                        </Link>
+                      </AntdMenu.Item>
+                    ))}
+                </SubMenu>
+              ))
+          ) : (
+            <AntdMenu.Item key="/">
+              <Link href={'/' + (item.slug === '/' ? '' : item.slug)}>
+                <a>{item.title}</a>
+              </Link>
+            </AntdMenu.Item>
+          )
         )}
       </AntdMenu>
     </div>

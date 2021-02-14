@@ -1,15 +1,24 @@
 import { Alert, Col, Layout, Row } from 'antd';
-import React from 'react';
+import { Entry } from 'contentful';
+import React, { ReactNode } from 'react';
+import { IPageFields } from '../../@types/generated/contentful';
 import SiteHeader from './header/header';
 import './layout.less';
 import styles from './layout.module.less';
 import SiteSider from './sider/sider';
+import LayoutType from './type/Layout';
 
 const { Header, Content, Footer, Sider } = Layout;
 
 const PROMO_MESSAGE = '';
 
-const SiteLayout = ({ children, layout, page }) => {
+type Props = {
+  page: Entry<IPageFields>;
+  layout: LayoutType;
+  children: ReactNode;
+};
+
+const SiteLayout = ({ children, layout, page }: Props) => {
   const DEFAULT_COL_PROPS = {
     xs: { span: 22, offset: 1 },
     sm: { span: 20, offset: 2 },

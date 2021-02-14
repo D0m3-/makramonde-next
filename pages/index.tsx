@@ -1,13 +1,21 @@
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
+import { Entry } from 'contentful';
 import { GetStaticProps } from 'next';
 import React from 'react';
+import { IPageFields } from '../@types/generated/contentful';
 import { fetchHome, fetchLayout } from '../src/api/contentful';
 import SiteLayout from '../src/layout/layout';
+import Layout from '../src/layout/type/Layout';
 
-const Home = ({ page, layout }) => {
+type Props = {
+  page: Entry<IPageFields>;
+  layout: Layout;
+};
+
+const Home = ({ page, layout }: Props) => {
   return (
     <SiteLayout layout={layout} page={page}>
-      {documentToReactComponents(page.fields.content)}
+      {page.fields.content && documentToReactComponents(page.fields.content)}
     </SiteLayout>
   );
 };

@@ -1,9 +1,14 @@
-const contentful = require('contentful');
+import { createClient } from 'contentful';
+import {
+  INavBar,
+  IPage,
+  IUniqueProduct,
+} from '../../@types/generated/contentful';
 
 const environment = process.env.STRIPE_ENV === 'test' ? 'test' : 'master';
 const accessToken = process.env.CONTENTFUL_ACCESS_TOKEN;
 
-const client = contentful.createClient({
+const client = createClient({
   space: 'lqbvqzcpaex7',
   accessToken: accessToken as string,
   environment,
@@ -12,7 +17,7 @@ const client = contentful.createClient({
 export const fetchHome = async () => fetchPage({ slug: '/' });
 
 export const fetchContentPages = async () => {
-  const entries = await client.getEntries({
+  const entries = await client.getEntries<IPage>({
     content_type: 'page',
     'fields.tag': 'content',
   });
@@ -20,7 +25,7 @@ export const fetchContentPages = async () => {
 };
 
 export const fetchProductPages = async () => {
-  const entries = await client.getEntries({
+  const entries = await client.getEntries<IPage>({
     content_type: 'page',
     'fields.tag': 'products',
   });
@@ -28,7 +33,7 @@ export const fetchProductPages = async () => {
 };
 
 export const fetchPage = async ({ slug }) => {
-  const entries = await client.getEntries({
+  const entries = await client.getEntries<IPage>({
     content_type: 'page',
     'fields.slug': slug,
   });
@@ -37,7 +42,7 @@ export const fetchPage = async ({ slug }) => {
 
 export const fetchLayout = async () => {
   const [entries, { products }] = await Promise.all([
-    client.getEntries({
+    client.getEntries<INavBar>({
       content_type: 'navBar',
     }),
     fetchProducts(),
@@ -46,13 +51,13 @@ export const fetchLayout = async () => {
 };
 
 export const fetchProducts = async () => {
-  const entries = await client.getEntries({
+  const entries = await client.getEntries<IUniqueProduct>({
     content_type: 'uniqueProduct',
   });
   return { products: entries.items };
 };
 
 export const fetchProduct = async ({ id }) => {
-  const entry = await client.getEntry(id);
+  const entry = await client.getEntry<IUniqueProduct>(id);
   return { product: entry };
 };
