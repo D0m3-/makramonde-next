@@ -13,7 +13,7 @@ const { Header, Content, Footer, Sider } = Layout;
 const PROMO_MESSAGE = '';
 
 type Props = {
-  page: Entry<IPageFields>;
+  page?: Entry<IPageFields>;
   layout: LayoutType;
   children: ReactNode;
 };

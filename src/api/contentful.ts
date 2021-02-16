@@ -1,8 +1,8 @@
 import { createClient } from 'contentful';
 import {
-  INavBar,
-  IPage,
-  IUniqueProduct,
+  INavBarFields,
+  IPageFields,
+  IUniqueProductFields,
 } from '../../@types/generated/contentful';
 
 const environment = process.env.STRIPE_ENV === 'test' ? 'test' : 'master';
@@ -17,7 +17,7 @@ const client = createClient({
 export const fetchHome = async () => fetchPage({ slug: '/' });
 
 export const fetchContentPages = async () => {
-  const entries = await client.getEntries<IPage>({
+  const entries = await client.getEntries<IPageFields>({
     content_type: 'page',
     'fields.tag': 'content',
   });
@@ -25,7 +25,7 @@ export const fetchContentPages = async () => {
 };
 
 export const fetchProductPages = async () => {
-  const entries = await client.getEntries<IPage>({
+  const entries = await client.getEntries<IPageFields>({
     content_type: 'page',
     'fields.tag': 'products',
   });
@@ -33,7 +33,7 @@ export const fetchProductPages = async () => {
 };
 
 export const fetchPage = async ({ slug }) => {
-  const entries = await client.getEntries<IPage>({
+  const entries = await client.getEntries<IPageFields>({
     content_type: 'page',
     'fields.slug': slug,
   });
@@ -42,7 +42,7 @@ export const fetchPage = async ({ slug }) => {
 
 export const fetchLayout = async () => {
   const [entries, { products }] = await Promise.all([
-    client.getEntries<INavBar>({
+    client.getEntries<INavBarFields>({
       content_type: 'navBar',
     }),
     fetchProducts(),
@@ -51,13 +51,13 @@ export const fetchLayout = async () => {
 };
 
 export const fetchProducts = async () => {
-  const entries = await client.getEntries<IUniqueProduct>({
+  const entries = await client.getEntries<IUniqueProductFields>({
     content_type: 'uniqueProduct',
   });
   return { products: entries.items };
 };
 
 export const fetchProduct = async ({ id }) => {
-  const entry = await client.getEntry<IUniqueProduct>(id);
+  const entry = await client.getEntry<IUniqueProductFields>(id);
   return { product: entry };
 };

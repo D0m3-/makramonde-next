@@ -11,7 +11,7 @@ import SiteLayout from '../../src/layout/layout';
 
 const ProductPage = ({ product, layout }) => {
   return (
-    <SiteLayout layout={layout} page={undefined}>
+    <SiteLayout layout={layout}>
       {documentToReactComponents(product.fields.description)}
     </SiteLayout>
   );
@@ -24,7 +24,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   ]);
   const slugs = productPages.map((page) => page.fields.slug);
   const productIds = products.map((product) => product.sys.id);
-  const paths = slugs.reduce(
+  const paths = slugs.reduce<{ params: { slug: string; product: string } }[]>(
     (paths, slug) =>
       paths.concat(
         productIds.map((product) => ({
