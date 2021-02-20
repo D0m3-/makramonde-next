@@ -1,6 +1,7 @@
-import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
+import { Entry } from 'contentful';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import React from 'react';
+import { IUniqueProductFields } from '../../@types/generated/contentful';
 import {
   fetchLayout,
   fetchProduct,
@@ -8,11 +9,19 @@ import {
   fetchProducts,
 } from '../../src/api/contentful';
 import SiteLayout from '../../src/layout/layout';
+import Layout from '../../src/layout/type/Layout';
+import Product from '../../src/Product';
 
-const ProductPage = ({ product, layout }) => {
+const ProductPage = ({
+  product,
+  layout,
+}: {
+  product: Entry<IUniqueProductFields>;
+  layout: Layout;
+}) => {
   return (
     <SiteLayout layout={layout}>
-      {documentToReactComponents(product.fields.description)}
+      <Product product={product} />
     </SiteLayout>
   );
 };
