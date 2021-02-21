@@ -5,7 +5,8 @@ import {
   IUniqueProductFields,
 } from '../../@types/generated/contentful';
 
-const environment = process.env.STRIPE_ENV === 'test' ? 'test' : 'master';
+const environment =
+  process.env.NEXT_PUBLIC_STRIPE_ENV === 'test' ? 'test' : 'master';
 const accessToken = process.env.CONTENTFUL_ACCESS_TOKEN;
 
 const client = createClient({
