@@ -4,8 +4,10 @@ import { Button } from 'antd';
 import Modal from 'antd/lib/modal/Modal';
 import { Asset, Entry } from 'contentful';
 import Image from 'next/image';
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { IUniqueProductFields } from '../@types/generated/contentful';
+import { checkout } from './api/stripe';
+import { CartContext } from './cart/CartContext';
 import styles from './Product.module.less';
 import contentfulImageLoader from './util/contentfulImageLoader';
 import { formatPrice } from './util/price';
@@ -14,7 +16,7 @@ const Product = ({ product }: { product: Entry<IUniqueProductFields> }) => {
   const [image, setImage] = useState<Asset>();
   const [loading, setLoading] = useState(false);
 
-  //const { addItem } = useContext(CartContext) || { addItem: () => {} };
+  const { addItem } = useContext(CartContext);
   return (
     <div className={styles.container}>
       <div className={styles.content}>
@@ -29,7 +31,7 @@ const Product = ({ product }: { product: Entry<IUniqueProductFields> }) => {
           <Button
             type="default"
             icon={<PlusCircleOutlined />}
-            //onClick={() => addItem(product)}
+            onClick={() => addItem(product)}
           >
             panier
           </Button>
@@ -40,7 +42,7 @@ const Product = ({ product }: { product: Entry<IUniqueProductFields> }) => {
             icon={<ShoppingOutlined />}
             onClick={async () => {
               setLoading(true);
-              //await checkout([product]);
+              await checkout([product]);
               setLoading(false);
             }}
           >

@@ -20,7 +20,7 @@ const ProductPage = ({
   layout: Layout;
 }) => {
   return (
-    <SiteLayout layout={layout}>
+    <SiteLayout layout={layout} product={product}>
       <Product product={product} />
     </SiteLayout>
   );

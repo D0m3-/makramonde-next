@@ -1,12 +1,23 @@
 import { MenuOutlined } from '@ant-design/icons';
 import { Modal, Tag, Tooltip } from 'antd';
+import Image from 'next/image';
 import React, { useState } from 'react';
+import CartButton from '../../cart/CartButton';
 import SiteMenu from '../menu/menu';
+import Layout from '../type/Layout';
 import styles from './header.module.less';
 
-const isTest = process.env.STRIPE_ENV === 'test';
+const isTest = process.env.NEXT_PUBLIC_STRIPE_ENV === 'test';
 
-const SiteHeader = ({ pageTitle, layout, slug }) => {
+const SiteHeader = ({
+  pageTitle,
+  layout,
+  slug,
+}: {
+  pageTitle: string;
+  layout: Layout;
+  slug: string;
+}) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   return (
     <div className={styles.container}>
@@ -20,7 +31,7 @@ const SiteHeader = ({ pageTitle, layout, slug }) => {
           onCancel={() => setMenuOpen(false)}
           footer={null}
         >
-          logo
+          <Image src="/images/MAKRA22.png" width="732" height="110" />
           <SiteMenu
             slug={slug}
             layout={layout}
@@ -40,7 +51,9 @@ const SiteHeader = ({ pageTitle, layout, slug }) => {
         )}
         <h1 className={styles.title}>{pageTitle}</h1>
       </div>
-      <div className={styles.cart}>cart</div>
+      <div className={styles.cart}>
+        <CartButton />
+      </div>
     </div>
   );
 };
