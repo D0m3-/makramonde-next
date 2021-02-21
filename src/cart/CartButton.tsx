@@ -2,6 +2,7 @@ import { DeleteOutlined, ShoppingCartOutlined } from '@ant-design/icons';
 import { Badge, Spin } from 'antd';
 import cx from 'classnames';
 import React, { useContext, useState } from 'react';
+import { checkout } from '../api/stripe';
 import styles from './CartButton.module.less';
 import { CartContext } from './CartContext';
 
@@ -18,7 +19,7 @@ const CartButton = () => {
               items.length
                 ? async () => {
                     setLoading(true);
-                    //await checkout(items);
+                    await checkout(items);
                     setLoading(false);
                   }
                 : undefined

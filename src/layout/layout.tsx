@@ -19,11 +19,12 @@ const PROMO_MESSAGE = '';
 type Props = {
   page?: Entry<IPageFields>;
   product?: Entry<IUniqueProductFields>;
+  pageTitle?: string;
   layout: LayoutType;
   children: ReactNode;
 };
 
-const SiteLayout = ({ children, layout, page, product }: Props) => {
+const SiteLayout = ({ children, layout, page, product, pageTitle }: Props) => {
   const DEFAULT_COL_PROPS = {
     xs: { span: 22, offset: 1 },
     sm: { span: 20, offset: 2 },
@@ -48,7 +49,9 @@ const SiteLayout = ({ children, layout, page, product }: Props) => {
         <Layout>
           <Header className={styles.header}>
             <SiteHeader
-              pageTitle={page?.fields.title || product?.fields.title || ''}
+              pageTitle={
+                page?.fields.title || product?.fields.title || pageTitle || ''
+              }
               layout={layout}
               slug={page?.fields.slug || '/'} //TODO slug
             />

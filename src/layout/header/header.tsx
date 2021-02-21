@@ -1,5 +1,6 @@
 import { MenuOutlined } from '@ant-design/icons';
 import { Modal, Tag, Tooltip } from 'antd';
+import Image from 'next/image';
 import React, { useState } from 'react';
 import CartButton from '../../cart/CartButton';
 import SiteMenu from '../menu/menu';
@@ -30,7 +31,7 @@ const SiteHeader = ({
           onCancel={() => setMenuOpen(false)}
           footer={null}
         >
-          logo
+          <Image src="/images/MAKRA22.png" width="732" height="110" />
           <SiteMenu
             slug={slug}
             layout={layout}

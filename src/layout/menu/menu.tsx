@@ -31,12 +31,12 @@ const Menu = ({ layout, slug, onSelect }: Props) => {
   };
 
   return (
-    <div>
+    <>
       <Input.Search
-        className={styles.search}
         placeholder="Filtrer les créations"
         allowClear
         onChange={onChange}
+        className={styles.search}
       />
       <AntdMenu
         defaultSelectedKeys={['1']}
@@ -84,7 +84,7 @@ const Menu = ({ layout, slug, onSelect }: Props) => {
           )
         )}
       </AntdMenu>
-    </div>
+    </>
   );
 };
 

@@ -6,6 +6,7 @@ import { Asset, Entry } from 'contentful';
 import Image from 'next/image';
 import React, { useContext, useState } from 'react';
 import { IUniqueProductFields } from '../@types/generated/contentful';
+import { checkout } from './api/stripe';
 import { CartContext } from './cart/CartContext';
 import styles from './Product.module.less';
 import contentfulImageLoader from './util/contentfulImageLoader';
@@ -41,7 +42,7 @@ const Product = ({ product }: { product: Entry<IUniqueProductFields> }) => {
             icon={<ShoppingOutlined />}
             onClick={async () => {
               setLoading(true);
-              //await checkout([product]);
+              await checkout([product]);
               setLoading(false);
             }}
           >
