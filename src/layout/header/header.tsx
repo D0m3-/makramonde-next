@@ -12,11 +12,9 @@ const isTest = process.env.NEXT_PUBLIC_STRIPE_ENV === 'test';
 const SiteHeader = ({
   pageTitle,
   layout,
-  slug,
 }: {
   pageTitle: string;
   layout: Layout;
-  slug: string;
 }) => {
   const [isMenuOpen, setMenuOpen] = useState(false);
   return (
@@ -32,11 +30,7 @@ const SiteHeader = ({
           footer={null}
         >
           <Image src="/images/MAKRA22.png" width="732" height="110" />
-          <SiteMenu
-            slug={slug}
-            layout={layout}
-            onSelect={() => setMenuOpen(false)}
-          />
+          <SiteMenu layout={layout} onSelect={() => setMenuOpen(false)} />
         </Modal>
       </div>
 

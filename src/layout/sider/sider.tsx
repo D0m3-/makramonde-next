@@ -6,11 +6,10 @@ import Layout from '../type/Layout';
 import styles from './sider.module.less';
 
 type Props = {
-  slug: string;
   layout: Layout;
 };
 
-const SiteSider = ({ layout, slug }) => {
+const SiteSider = ({ layout }: Props) => {
   return (
     <>
       <div className={styles.container}>
@@ -20,7 +19,7 @@ const SiteSider = ({ layout, slug }) => {
           </a>
         </Link>
       </div>
-      <SiteMenu slug={slug} layout={layout} />
+      <SiteMenu layout={layout} />
     </>
   );
 };

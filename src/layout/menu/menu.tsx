@@ -1,6 +1,7 @@
 import { TagsOutlined } from '@ant-design/icons';
 import { Input, Menu as AntdMenu } from 'antd';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React, { useState } from 'react';
 import {
   layoutProductsToCategories,
@@ -13,14 +14,14 @@ import styles from './menu.module.less';
 const { SubMenu } = AntdMenu;
 
 type Props = {
-  slug: string;
   layout: Layout;
   onSelect?: () => void;
 };
 
-const Menu = ({ layout, slug, onSelect }: Props) => {
+const Menu = ({ layout, onSelect }: Props) => {
   const [search, setSearch] = useState('');
   const categories = layoutProductsToCategories({ layout, search });
+  const router = useRouter();
 
   const items = layoutToMenu({ layout });
   const onChange = (e) => {
@@ -28,7 +29,7 @@ const Menu = ({ layout, slug, onSelect }: Props) => {
   };
 
   const getProductSlug = getProductSlugFactory({ layout });
-
+  console.log({ router });
   return (
     <>
       <Input.Search
@@ -39,7 +40,7 @@ const Menu = ({ layout, slug, onSelect }: Props) => {
       />
       <AntdMenu
         defaultSelectedKeys={['1']}
-        selectedKeys={[slug]}
+        selectedKeys={[router.asPath]}
         mode="inline"
         className={styles.menu}
         onClick={onSelect}
@@ -62,7 +63,7 @@ const Menu = ({ layout, slug, onSelect }: Props) => {
                   {Object.values(categories[category])
                     .sort()
                     .map((product) => (
-                      <AntdMenu.Item key={product.sys.id}>
+                      <AntdMenu.Item key={getProductSlug(product)}>
                         <Link href={getProductSlug(product)}>
                           <a>{product.fields.title}</a>
                         </Link>
@@ -71,7 +72,7 @@ const Menu = ({ layout, slug, onSelect }: Props) => {
                 </SubMenu>
               ))
           ) : (
-            <AntdMenu.Item key="/">
+            <AntdMenu.Item key={'/' + (item.slug === '/' ? '' : item.slug)}>
               <Link href={'/' + (item.slug === '/' ? '' : item.slug)}>
                 <a>{item.title}</a>
               </Link>

@@ -44,7 +44,7 @@ const SiteLayout = ({ children, layout, page, product, pageTitle }: Props) => {
           className={styles.sider}
           trigger={null}
         >
-          <SiteSider slug={page?.fields.slug} layout={layout} />
+          <SiteSider layout={layout} />
         </Sider>
         <Layout>
           <Header className={styles.header}>
@@ -53,7 +53,6 @@ const SiteLayout = ({ children, layout, page, product, pageTitle }: Props) => {
                 page?.fields.title || product?.fields.title || pageTitle || ''
               }
               layout={layout}
-              slug={page?.fields.slug || '/'} //TODO slug
             />
           </Header>
           {PROMO_MESSAGE && (
