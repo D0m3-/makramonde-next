@@ -12,6 +12,7 @@
   },
   "dependencies": {
     "@ant-design/icons": "^4.4.0",
+    "@contentful/rich-text-plain-text-renderer": "^14.1.2",
     "@contentful/rich-text-react-renderer": "^14.1.2",
     "@stripe/stripe-js": "^1.12.1",
     "@webdeb/next-styles": "^1.1.1",

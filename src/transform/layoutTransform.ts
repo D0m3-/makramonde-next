@@ -1,3 +1,4 @@
+import { documentToPlainTextString } from '@contentful/rich-text-plain-text-renderer';
 import { Entry } from 'contentful';
 import {
   ICategory,
@@ -13,6 +14,19 @@ export const layoutProductsToCategories = ({
   search: string;
 }) => {
   return layout.products.reduce((categories, product) => {
+    if (
+      search.length &&
+      !product.fields.title.toLowerCase().includes(search.toLowerCase()) &&
+      !(
+        product.fields.description &&
+        documentToPlainTextString(product.fields.description)
+          .toLowerCase()
+          .includes(search.toLowerCase())
+      )
+    ) {
+      return categories;
+    }
+
     const productCategories = product.fields.categories;
     (
       productCategories || [{ fields: { name: 'Autres' } } as ICategory]
