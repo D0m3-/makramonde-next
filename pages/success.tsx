@@ -9,7 +9,9 @@ const SuccessPage = ({ layout }: { layout: Layout }) => (
   <SiteLayout layout={layout} pageTitle="Achat finalisé">
     <h1>Merci pour votre achat!</h1>
     <p>Vous allez bientôt recevoir un email de confirmation.</p>
-    <Link href="/">Retour au site</Link>
+    <Link href="/">
+      <a>Retour au site</a>
+    </Link>
   </SiteLayout>
 );
 

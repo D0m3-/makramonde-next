@@ -93,6 +93,9 @@ export interface IUniqueProductFields {
 
   /** Categories */
   categories?: ICategory[] | undefined;
+
+  /** Slug */
+  slug: string;
 }
 
 /** Unique product that customer can buy */

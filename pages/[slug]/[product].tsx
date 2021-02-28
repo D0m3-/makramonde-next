@@ -4,13 +4,14 @@ import React from 'react';
 import { IUniqueProductFields } from '../../@types/generated/contentful';
 import {
   fetchLayout,
-  fetchProduct,
+  fetchProductBySlug,
   fetchProductPages,
   fetchProducts,
 } from '../../src/api/contentful';
 import SiteLayout from '../../src/layout/layout';
 import Layout from '../../src/layout/type/Layout';
 import Product from '../../src/Product';
+import { getProductSlug } from '../../src/util/product';
 
 const ProductPage = ({
   product,
@@ -32,11 +33,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
     fetchProducts(),
   ]);
   const slugs = productPages.map((page) => page.fields.slug);
-  const productIds = products.map((product) => product.sys.id);
+  const productSlugs = products.map(getProductSlug);
   const paths = slugs.reduce<{ params: { slug: string; product: string } }[]>(
     (paths, slug) =>
       paths.concat(
-        productIds.map((product) => ({
+        productSlugs.map((product) => ({
           params: {
             slug,
             product,
@@ -53,7 +54,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const [{ product }, layout] = await Promise.all([
-    fetchProduct({ id: params?.product }),
+    fetchProductBySlug({ slug: params?.product }),
     fetchLayout(),
   ]);
 

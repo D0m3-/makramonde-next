@@ -1,19 +1,16 @@
 import { TagsOutlined } from '@ant-design/icons';
 import { Input, Menu as AntdMenu } from 'antd';
-import { Entry } from 'contentful';
 import Link from 'next/link';
 import React, { useState } from 'react';
-import { IUniqueProductFields } from '../../../@types/generated/contentful';
 import {
   layoutProductsToCategories,
   layoutToMenu,
 } from '../../transform/layoutTransform';
+import { getProductSlugFactory } from '../../util/product';
 import Layout from '../type/Layout';
 import styles from './menu.module.less';
 
 const { SubMenu } = AntdMenu;
-
-const getProductUrl = (product: Entry<IUniqueProductFields>) => product.sys.id;
 
 type Props = {
   slug: string;
@@ -29,6 +26,8 @@ const Menu = ({ layout, slug, onSelect }: Props) => {
   const onChange = (e) => {
     setSearch(e.target.value);
   };
+
+  const getProductSlug = getProductSlugFactory({ layout });
 
   return (
     <>
@@ -64,11 +63,7 @@ const Menu = ({ layout, slug, onSelect }: Props) => {
                     .sort()
                     .map((product) => (
                       <AntdMenu.Item key={product.sys.id}>
-                        <Link
-                          href={
-                            '/' + item.slug + '/' + getProductUrl(product) || ''
-                          }
-                        >
+                        <Link href={getProductSlug(product)}>
                           <a>{product.fields.title}</a>
                         </Link>
                       </AntdMenu.Item>

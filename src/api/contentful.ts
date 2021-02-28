@@ -62,3 +62,11 @@ export const fetchProduct = async ({ id }) => {
   const entry = await client.getEntry<IUniqueProductFields>(id);
   return { product: entry };
 };
+
+export const fetchProductBySlug = async ({ slug }) => {
+  const entries = await client.getEntries<IUniqueProductFields>({
+    content_type: 'uniqueProduct',
+    'fields.slug': slug,
+  });
+  return { product: entries.items[0] };
+};
