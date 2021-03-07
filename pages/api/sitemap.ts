@@ -1,6 +1,8 @@
 import { NextApiRequest, NextApiResponse } from 'next';
-import { fetchContentPages } from '../../src/api/contentful';
-import { getAllProductSlugs } from '../../src/util/product';
+import {
+  fetchContentPages,
+  getAllProductSlugs,
+} from '../../src/api/contentful';
 
 export default async (req: NextApiRequest, res: NextApiResponse) => {
   const staticRoutes = [''];

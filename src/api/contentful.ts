@@ -4,11 +4,11 @@ import {
   IPageFields,
   IUniqueProductFields,
 } from '../../@types/generated/contentful';
+import { getProductSlug } from '../util/product';
 
 const environment =
   process.env.NEXT_PUBLIC_STRIPE_ENV === 'test' ? 'test' : 'master';
 const accessToken = process.env.CONTENTFUL_ACCESS_TOKEN;
-
 const client = createClient({
   space: 'lqbvqzcpaex7',
   accessToken: accessToken as string,
@@ -69,4 +69,18 @@ export const fetchProductBySlug = async ({ slug }) => {
     'fields.slug': slug,
   });
   return { product: entries.items[0] };
+};
+
+export const getAllProductSlugs = async () => {
+  const [{ productPages }, { products }] = await Promise.all([
+    fetchProductPages(),
+    fetchProducts(),
+  ]);
+  const pageSlugs = productPages.map((page) => page.fields.slug);
+  const productSlugs = products.map(getProductSlug);
+  return pageSlugs.reduce<string[]>(
+    (slugs, pageSlug) =>
+      slugs.concat(productSlugs.map((slug) => `${pageSlug}/${slug}`)),
+    []
+  );
 };

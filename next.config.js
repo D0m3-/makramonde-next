@@ -21,6 +21,7 @@ module.exports = withStyles({
   target: 'serverless',
   env: {
     URL: process.env.URL,
+    GOOGLE_ANALYTICS_ID: process.env.GOOGLE_ANALYTICS_ID,
   },
   async rewrites() {
     return [
