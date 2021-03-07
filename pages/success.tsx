@@ -5,6 +5,7 @@ import { fetchLayout } from '../src/api/contentful';
 import SiteLayout from '../src/layout/layout';
 import Layout from '../src/layout/type/Layout';
 import SEO from '../src/seo/SEO';
+import { REVALIDATE_INTERVAL } from '../src/util/constants';
 
 const SuccessPage = ({ layout }: { layout: Layout }) => (
   <>
@@ -23,6 +24,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const layout = await fetchLayout();
   return {
     props: { layout },
+    revalidate: REVALIDATE_INTERVAL,
   };
 };
 

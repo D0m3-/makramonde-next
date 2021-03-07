@@ -12,6 +12,7 @@ import styles from '../src/layout/index.module.less';
 import SiteLayout from '../src/layout/layout';
 import Layout from '../src/layout/type/Layout';
 import SEO from '../src/seo/SEO';
+import { REVALIDATE_INTERVAL } from '../src/util/constants';
 import { getProductSlugFactory } from '../src/util/product';
 
 type Props = {
@@ -74,6 +75,7 @@ export const getStaticProps: GetStaticProps = async (context) => {
   const [{ page }, layout] = await Promise.all([fetchHome(), fetchLayout()]);
   return {
     props: { page, layout },
+    revalidate: REVALIDATE_INTERVAL,
   };
 };
 

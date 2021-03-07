@@ -15,6 +15,7 @@ import SiteLayout from '../../src/layout/layout';
 import Layout from '../../src/layout/type/Layout';
 import Product from '../../src/product/Product';
 import SEO from '../../src/seo/SEO';
+import { REVALIDATE_INTERVAL } from '../../src/util/constants';
 import { formatPrice } from '../../src/util/price';
 import { getProductSlug } from '../../src/util/product';
 
@@ -108,6 +109,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   return {
     props: { product, layout },
+    revalidate: REVALIDATE_INTERVAL,
   };
 };
 
