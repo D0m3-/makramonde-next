@@ -8,6 +8,7 @@ import {
 } from '../src/api/contentful';
 import SiteLayout from '../src/layout/layout';
 import SEO from '../src/seo/SEO';
+import { REVALIDATE_INTERVAL } from '../src/util/constants';
 
 const Page = ({ page, layout }) => {
   return (
@@ -38,6 +39,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
   ]);
   return {
     props: { page, layout },
+    revalidate: REVALIDATE_INTERVAL,
   };
 };
 
