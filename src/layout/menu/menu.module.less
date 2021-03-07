@@ -1,0 +1,33 @@
+@import '../../makramonde.less';
+
+.container {
+}
+
+.logo {
+  width: 200px;
+}
+
+.title {
+  flex: 1 1 auto;
+  margin: 0;
+  text-align: center;
+}
+
+.menu {
+  text-transform: capitalize;
+  a,
+  a:hover,
+  a:focus {
+    color: inherit;
+  }
+}
+
+.search {
+}
+
+@media (min-width: @screen-md-min) {
+  .search {
+    padding: 0 @padding-sm;
+    border-right: 1px solid #f0f0f0;
+  }
+}

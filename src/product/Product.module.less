@@ -1,0 +1,73 @@
+@import '../makramonde.less';
+
+@arrow-width: 30px;
+@arrow-height: 60px;
+.container {
+  margin: 0;
+}
+
+@media (min-width: @screen-md-min) {
+  .container {
+    margin: 0 @arrow-width + @padding-sm;
+  }
+}
+
+.nextContainer {
+  position: absolute;
+  left: 100%;
+  width: 100%;
+}
+
+.previousContainer {
+  position: absolute;
+  right: 100%;
+  width: 100%;
+}
+
+.currentContainer {
+}
+
+.content {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.images {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  min-height: 0px;
+  touch-action: pan-y pinch-zoom;
+}
+
+.imageCommon {
+  //width: 100%;
+}
+
+.image {
+  .imageCommon();
+  cursor: pointer;
+}
+
+.imageModal {
+  .imageCommon();
+}
+
+.buttons {
+  display: flex;
+  justify-content: flex-end;
+}
+
+.marginLeft {
+  margin-left: @padding-md;
+}
+
+.modal {
+  max-width: 100%;
+}
+
+@media (min-width: @screen-md-min) {
+  .modal {
+    max-width: 80%;
+  }
+}

@@ -1,66 +1,80 @@
-import Head from 'next/head';
+import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
+import { Button } from 'antd';
+import { Entry } from 'contentful';
+import { GetStaticProps } from 'next';
+import Image from 'next/image';
+import Link from 'next/link';
 import React from 'react';
-import styles from '../styles/Home.module.css';
+import { IPageFields } from '../@types/generated/contentful';
+import { fetchHome, fetchLayout } from '../src/api/contentful';
+import config from '../src/config';
+import styles from '../src/layout/index.module.less';
+import SiteLayout from '../src/layout/layout';
+import Layout from '../src/layout/type/Layout';
+import SEO from '../src/seo/SEO';
+import { getProductSlugFactory } from '../src/util/product';
 
-export default function Home() {
+type Props = {
+  page: Entry<IPageFields>;
+  layout: Layout;
+};
+const Home = ({ page, layout }: Props) => {
   return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
-        </div>
-      </main>
-
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
+    <>
+      <SEO
+        jsonld={{
+          '@type': 'WebSite',
+          url: config.siteUrl,
+          inLanguage: 'fr',
+          keywords:
+            'macramé, ecommerce, bijou, unique, métal, art, pierres, création, atelier, makramonde',
+          description: config.description,
+          image: `${config.siteUrl}/images/makramonde-bijou.png`,
+          name: config.title,
+          alternateName: `Makramonde | Ecommerce macramé`,
+        }}
+      />
+      <SiteLayout layout={layout} page={page}>
+        <h2>
+          <Image
+            src="/images/makramonde-bijou.png"
+            width="2048"
+            height="1536"
+          />
+        </h2>
+        {page.fields.content && documentToReactComponents(page.fields.content)}
+        {layout.products.length ? (
+          <>
+            <p>Pour voir mes dernières créations, c'est par ici :</p>
+            <div className={styles.explore}>
+              <Button type="primary" size="large">
+                <Link
+                  href={getProductSlugFactory({ layout })(layout.products[0])}
+                >
+                  <a>Explorer</a>
+                </Link>
+              </Button>
+            </div>
+          </>
+        ) : (
+          <p>
+            Je n'ai actuellement aucune création à vous proposer en ligne.
+            Revenez bientôt pour voir mes nouveautés !
+          </p>
+        )}
+        <h2>
+          <Image src="/images/assemblage.jpg" width="2048" height="1536" />
+        </h2>
+      </SiteLayout>
+    </>
   );
-}
+};
+
+export const getStaticProps: GetStaticProps = async (context) => {
+  const [{ page }, layout] = await Promise.all([fetchHome(), fetchLayout()]);
+  return {
+    props: { page, layout },
+  };
+};
+
+export default Home;

@@ -1,0 +1,35 @@
+@import '../makramonde.less';
+
+@arrow-width: 30px;
+@arrow-height: 100%;
+
+.arrowLeft {
+  position: absolute;
+  left: 0;
+}
+
+.arrowRight {
+  position: absolute;
+  right: @arrow-width;
+}
+
+.arrowFloater {
+  display: block;
+  position: fixed;
+  top: 50%;
+  transform: translate(0, -50%);
+  text-align: center;
+  width: @arrow-width;
+  height: @arrow-height;
+}
+
+.arrowSpacing {
+  width: 30px;
+  position: relative;
+  margin: 0 10px;
+}
+
+:global(.ant-btn).arrow {
+  height: 100%;
+  color: @primary-7;
+}

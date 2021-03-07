@@ -1,0 +1,47 @@
+@import '../../makramonde.less';
+
+.container {
+  position: relative;
+  display: flex;
+  height: 100%;
+  align-items: center;
+}
+
+.titleContainer {
+  flex: 1 1 0;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  margin: 0;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.menu {
+  margin-right: @padding-sm;
+}
+
+.menuIcon {
+  padding: 5px 10px;
+  margin-left: -10px;
+}
+
+.cart {
+}
+
+@media (min-width: @screen-md-min) {
+  .menu {
+    display: none;
+  }
+}
+
+@media (min-width: @screen-md-min) {
+  .arrow {
+    display: none;
+  }
+}

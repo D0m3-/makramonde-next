@@ -1,0 +1,20 @@
+@import '~antd/dist/antd.less';
+
+#__next {
+  height: 100%;
+}
+.full-height {
+  min-height: 100%;
+  &.ant-row,
+  &.ant-row-flex {
+    & > .ant-col {
+      min-height: 100%;
+      > .tl-edges {
+        min-height: 100%;
+        > .tl-wrapper {
+          min-height: 100%;
+        }
+      }
+    }
+  }
+}
