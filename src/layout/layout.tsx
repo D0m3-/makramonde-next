@@ -6,6 +6,7 @@ import {
   IUniqueProductFields,
 } from '../../@types/generated/contentful';
 import { CartProvider } from '../cart/CartContext';
+import Arrows from '../product/Arrows';
 import SiteHeader from './header/header';
 import './layout.less';
 import styles from './layout.module.less';
@@ -53,6 +54,7 @@ const SiteLayout = ({ children, layout, page, product, pageTitle }: Props) => {
                 page?.fields.title || product?.fields.title || pageTitle || ''
               }
               layout={layout}
+              product={product}
             />
           </Header>
           {PROMO_MESSAGE && (
@@ -65,7 +67,14 @@ const SiteLayout = ({ children, layout, page, product, pageTitle }: Props) => {
           )}
           <Content className={styles.content}>
             <Row className={'full-height'}>
-              <Col {...DEFAULT_COL_PROPS}>{children}</Col>
+              <Col {...DEFAULT_COL_PROPS}>
+                {children}
+                {product && (
+                  <div className={styles.arrows}>
+                    <Arrows layout={layout} product={product} floating />
+                  </div>
+                )}
+              </Col>
             </Row>
           </Content>
           <Footer className={styles.footer}>

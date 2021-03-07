@@ -5,12 +5,12 @@ import Modal from 'antd/lib/modal/Modal';
 import { Asset, Entry } from 'contentful';
 import Image from 'next/image';
 import React, { useContext, useState } from 'react';
-import { IUniqueProductFields } from '../@types/generated/contentful';
-import { checkout } from './api/stripe';
-import { CartContext } from './cart/CartContext';
+import { IUniqueProductFields } from '../../@types/generated/contentful';
+import { checkout } from '../api/stripe';
+import { CartContext } from '../cart/CartContext';
+import contentfulImageLoader from '../util/contentfulImageLoader';
+import { formatPrice } from '../util/price';
 import styles from './Product.module.less';
-import contentfulImageLoader from './util/contentfulImageLoader';
-import { formatPrice } from './util/price';
 
 const Product = ({ product }: { product: Entry<IUniqueProductFields> }) => {
   const [image, setImage] = useState<Asset>();

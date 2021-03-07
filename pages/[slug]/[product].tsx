@@ -13,7 +13,7 @@ import {
 import config from '../../src/config';
 import SiteLayout from '../../src/layout/layout';
 import Layout from '../../src/layout/type/Layout';
-import Product from '../../src/Product';
+import Product from '../../src/product/Product';
 import SEO from '../../src/seo/SEO';
 import { formatPrice } from '../../src/util/price';
 import { getProductSlug } from '../../src/util/product';
