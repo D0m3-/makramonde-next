@@ -7,9 +7,11 @@ import Link from 'next/link';
 import React from 'react';
 import { IPageFields } from '../@types/generated/contentful';
 import { fetchHome, fetchLayout } from '../src/api/contentful';
+import config from '../src/config';
 import styles from '../src/layout/index.module.less';
 import SiteLayout from '../src/layout/layout';
 import Layout from '../src/layout/type/Layout';
+import SEO from '../src/seo/SEO';
 import { getProductSlugFactory } from '../src/util/product';
 
 type Props = {
@@ -18,34 +20,53 @@ type Props = {
 };
 const Home = ({ page, layout }: Props) => {
   return (
-    <SiteLayout layout={layout} page={page}>
-      <h2>
-        <Image src="/images/makramonde-bijou.png" width="4096" height="3072" />
-      </h2>
-      {page.fields.content && documentToReactComponents(page.fields.content)}
-      {layout.products.length ? (
-        <>
-          <p>Pour voir mes dernières créations, c'est par ici :</p>
-          <div className={styles.explore}>
-            <Button type="primary" size="large">
-              <Link
-                href={getProductSlugFactory({ layout })(layout.products[0])}
-              >
-                <a>Explorer</a>
-              </Link>
-            </Button>
-          </div>
-        </>
-      ) : (
-        <p>
-          Je n'ai actuellement aucune création à vous proposer en ligne. Revenez
-          bientôt pour voir mes nouveautés !
-        </p>
-      )}
-      <h2>
-        <Image src="/images/assemblage.jpg" width="4096" height="3072" />
-      </h2>
-    </SiteLayout>
+    <>
+      <SEO
+        jsonld={{
+          '@type': 'WebSite',
+          url: config.siteUrl,
+          inLanguage: 'fr',
+          keywords:
+            'macramé, ecommerce, bijou, unique, métal, art, pierres, création, atelier, makramonde',
+          description: config.description,
+          image: `${config.siteUrl}/images/makramonde-bijou.png`,
+          name: config.title,
+          alternateName: `Makramonde | Ecommerce macramé`,
+        }}
+      />
+      <SiteLayout layout={layout} page={page}>
+        <h2>
+          <Image
+            src="/images/makramonde-bijou.png"
+            width="2048"
+            height="1536"
+          />
+        </h2>
+        {page.fields.content && documentToReactComponents(page.fields.content)}
+        {layout.products.length ? (
+          <>
+            <p>Pour voir mes dernières créations, c'est par ici :</p>
+            <div className={styles.explore}>
+              <Button type="primary" size="large">
+                <Link
+                  href={getProductSlugFactory({ layout })(layout.products[0])}
+                >
+                  <a>Explorer</a>
+                </Link>
+              </Button>
+            </div>
+          </>
+        ) : (
+          <p>
+            Je n'ai actuellement aucune création à vous proposer en ligne.
+            Revenez bientôt pour voir mes nouveautés !
+          </p>
+        )}
+        <h2>
+          <Image src="/images/assemblage.jpg" width="2048" height="1536" />
+        </h2>
+      </SiteLayout>
+    </>
   );
 };
 

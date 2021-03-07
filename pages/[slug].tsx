@@ -7,12 +7,16 @@ import {
   fetchPage,
 } from '../src/api/contentful';
 import SiteLayout from '../src/layout/layout';
+import SEO from '../src/seo/SEO';
 
 const Page = ({ page, layout }) => {
   return (
-    <SiteLayout layout={layout} page={page}>
-      {documentToReactComponents(page.fields.content)}
-    </SiteLayout>
+    <>
+      <SEO title={page?.fields.title} />
+      <SiteLayout layout={layout} page={page}>
+        {documentToReactComponents(page.fields.content)}
+      </SiteLayout>
+    </>
   );
 };
 

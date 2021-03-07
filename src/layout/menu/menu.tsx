@@ -29,7 +29,6 @@ const Menu = ({ layout, onSelect }: Props) => {
   };
 
   const getProductSlug = getProductSlugFactory({ layout });
-  console.log({ router });
   return (
     <>
       <Input.Search

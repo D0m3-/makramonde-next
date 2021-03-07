@@ -16,6 +16,8 @@ const Product = ({ product }: { product: Entry<IUniqueProductFields> }) => {
   const [image, setImage] = useState<Asset>();
   const [loading, setLoading] = useState(false);
 
+  const { width, height } = getImageDimensions(image);
+
   const { addItem } = useContext(CartContext);
   return (
     <div className={styles.container}>
@@ -50,18 +52,21 @@ const Product = ({ product }: { product: Entry<IUniqueProductFields> }) => {
           </Button>
         </p>
         <div className={styles.images}>
-          {product.fields.images?.map((image) => (
-            <div key={image.sys.id} onClick={() => setImage(image)}>
-              <Image
-                src={image.fields.file.url}
-                width={image.fields.file.details.image?.width || 100}
-                height={image.fields.file.details.image?.height || 100}
-                alt={`${image.fields.description}`}
-                loader={contentfulImageLoader}
-                className={styles.image}
-              />
-            </div>
-          ))}
+          {product.fields.images?.map((image) => {
+            const { width, height } = getImageDimensions(image);
+            return (
+              <div key={image.sys.id} onClick={() => setImage(image)}>
+                <Image
+                  src={image.fields.file.url}
+                  width={width}
+                  height={height}
+                  alt={`${image.fields.description}`}
+                  loader={contentfulImageLoader}
+                  className={styles.image}
+                />
+              </div>
+            );
+          })}
         </div>
       </div>
       <Modal
@@ -84,6 +89,19 @@ const Product = ({ product }: { product: Entry<IUniqueProductFields> }) => {
       </Modal>
     </div>
   );
+};
+
+const getImageDimensions = (image?: Asset) => {
+  if (!image || !image.fields.file.details.image) {
+    return { width: 100, height: 100 };
+  }
+  const {
+    width: imageWidth,
+    height: imageHeight,
+  } = image.fields.file.details.image;
+  const width = Math.min(imageWidth, 2048);
+  const height = (imageHeight / imageWidth) * width;
+  return { width, height };
 };
 
 export default Product;
