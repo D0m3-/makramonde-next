@@ -3,6 +3,7 @@ import {
   IPageFields,
   IUniqueProductFields,
 } from '../../@types/generated/contentful';
+import { fetchProductPages, fetchProducts } from '../api/contentful';
 import Layout from '../layout/type/Layout';
 
 export const getProductSlug = (product: Entry<IUniqueProductFields>) =>
@@ -15,4 +16,18 @@ export const getProductSlugFactory = ({ layout }: { layout: Layout }) => {
     )?.fields.slug || 'produits';
   return (product: Entry<IUniqueProductFields>) =>
     `/${directory}/${getProductSlug(product)}`;
+};
+
+export const getAllProductSlugs = async () => {
+  const [{ productPages }, { products }] = await Promise.all([
+    fetchProductPages(),
+    fetchProducts(),
+  ]);
+  const pageSlugs = productPages.map((page) => page.fields.slug);
+  const productSlugs = products.map(getProductSlug);
+  return pageSlugs.reduce<string[]>(
+    (slugs, pageSlug) =>
+      slugs.concat(productSlugs.map((slug) => `${pageSlug}/${slug}`)),
+    []
+  );
 };

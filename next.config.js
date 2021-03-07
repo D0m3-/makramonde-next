@@ -19,4 +19,19 @@ module.exports = withStyles({
     modifyVars: themeVariables,
   },
   target: 'serverless',
+  env: {
+    URL: process.env.URL,
+  },
+  async rewrites() {
+    return [
+      {
+        source: '/sitemap.xml',
+        destination: '/api/sitemap',
+      },
+      {
+        source: '/robots.txt',
+        destination: '/api/robots',
+      },
+    ];
+  },
 });
