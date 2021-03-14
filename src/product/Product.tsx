@@ -8,9 +8,15 @@ import React, { useContext, useState } from 'react';
 import { IUniqueProductFields } from '../../@types/generated/contentful';
 import { checkout } from '../api/stripe';
 import { CartContext } from '../cart/CartContext';
+import { THEME_VARIABLES } from '../util/configConstants';
+import { IMAGE_SIZES } from '../util/constants';
 import contentfulImageLoader from '../util/contentfulImageLoader';
 import { formatPrice } from '../util/price';
 import styles from './Product.module.less';
+
+const FULLSCREEN_IMAGE_SIZES = `(min-width: ${
+  process.env.THEME_VARIABLES?.[THEME_VARIABLES.SCREEN_MD]
+}) 80vw, 100vw`;
 
 const Product = ({ product }: { product: Entry<IUniqueProductFields> }) => {
   const [image, setImage] = useState<Asset>();
@@ -60,6 +66,8 @@ const Product = ({ product }: { product: Entry<IUniqueProductFields> }) => {
                   src={image.fields.file.url}
                   width={width}
                   height={height}
+                  layout="responsive"
+                  sizes={IMAGE_SIZES}
                   alt={`${image.fields.description}`}
                   loader={contentfulImageLoader}
                   className={styles.image}
@@ -82,6 +90,9 @@ const Product = ({ product }: { product: Entry<IUniqueProductFields> }) => {
             alt={`${image.fields.description} - Plein écran`}
             width={image.fields.file.details.image?.width || 100}
             height={image.fields.file.details.image?.height || 100}
+            layout="responsive"
+            sizes={FULLSCREEN_IMAGE_SIZES}
+            quality={90}
             loader={contentfulImageLoader}
             className={styles.imageModal}
           />
