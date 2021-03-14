@@ -2,10 +2,21 @@ const lessToJS = require('less-vars-to-js');
 const fs = require('fs');
 const path = require('path');
 const withStyles = require('@webdeb/next-styles');
+const { THEME_VARIABLES } = require('./src/util/configConstants');
 
-const themeVariables = lessToJS(
+const antVariables = lessToJS(
+  fs.readFileSync(
+    path.resolve(
+      __dirname,
+      './node_modules/antd/lib/style/themes/default.less'
+    ),
+    'utf8'
+  )
+);
+const modifyVariables = lessToJS(
   fs.readFileSync(path.resolve(__dirname, './src/makramonde.less'), 'utf8')
 );
+const themeVariables = { ...antVariables, ...modifyVariables };
 
 module.exports = withStyles({
   less: true,
@@ -16,12 +27,22 @@ module.exports = withStyles({
   },
   lessLoaderOptions: {
     javascriptEnabled: true,
-    modifyVars: themeVariables,
+    modifyVars: modifyVariables,
   },
   target: 'serverless',
   env: {
     URL: process.env.URL,
     GOOGLE_ANALYTICS_ID: process.env.GOOGLE_ANALYTICS_ID,
+    THEME_VARIABLES: Object.values(THEME_VARIABLES).reduce(
+      (variables, value) => {
+        variables[value] = themeVariables[value];
+        return variables;
+      },
+      {}
+    ),
+  },
+  images: {
+    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
   },
   async rewrites() {
     return [

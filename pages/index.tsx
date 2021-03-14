@@ -12,7 +12,7 @@ import styles from '../src/layout/index.module.less';
 import SiteLayout from '../src/layout/layout';
 import Layout from '../src/layout/type/Layout';
 import SEO from '../src/seo/SEO';
-import { REVALIDATE_INTERVAL } from '../src/util/constants';
+import { IMAGE_SIZES, REVALIDATE_INTERVAL } from '../src/util/constants';
 import { getProductSlugFactory } from '../src/util/product';
 
 type Props = {
@@ -41,6 +41,9 @@ const Home = ({ page, layout }: Props) => {
             src="/images/makramonde-bijou.png"
             width="2048"
             height="1536"
+            layout="responsive"
+            sizes={IMAGE_SIZES}
+            quality={90}
           />
         </h2>
         {page.fields.content && documentToReactComponents(page.fields.content)}
@@ -64,7 +67,12 @@ const Home = ({ page, layout }: Props) => {
           </p>
         )}
         <h2>
-          <Image src="/images/assemblage.jpg" width="2048" height="1536" />
+          <Image
+            src="/images/assemblage.jpg"
+            width="2048"
+            height="1536"
+            sizes={IMAGE_SIZES}
+          />
         </h2>
       </SiteLayout>
     </>

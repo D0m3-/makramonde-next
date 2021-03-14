@@ -34,7 +34,13 @@ const SiteHeader = ({
           onCancel={() => setMenuOpen(false)}
           footer={null}
         >
-          <Image src="/images/MAKRA22.png" width="732" height="110" />
+          <Image
+            src="/images/MAKRA200.png"
+            width="200"
+            height="30"
+            layout="fixed"
+            quality={90}
+          />
           <SiteMenu layout={layout} onSelect={() => setMenuOpen(false)} />
         </Modal>
       </div>
