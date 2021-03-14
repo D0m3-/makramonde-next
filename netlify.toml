@@ -9,13 +9,18 @@
 
 [[redirects]]
   from = "/sitemap.xml"
-  to = "/api/sitemap"
+  to = "/.netlify/functions/next_api_sitemap"
   status = 200
 
 [[redirects]]
   from = "/robots.txt"
-  to = "/api/robots"
+  to = "/.netlify/functions/next_api_robots"
   status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/404"
+  status = 404
 
   ## Uncomment to use this redirect for Single Page Applications like create-react-app.
   ## Not needed for static site generators.
