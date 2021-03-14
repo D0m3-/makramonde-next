@@ -26,7 +26,7 @@
       "src": "_next/image?url=%2Fimages%2Fmakramonde-transparent.png&w=144&q=90",
       "sizes": "144x144",
       "type": "image/webp"
-    }
+    },
     {
       "src": "_next/image?url=%2Fimages%2Fmakramonde-bijou.png&w=512&q=90",
       "sizes": "512x512",
