@@ -1,7 +1,9 @@
 const lessToJS = require('less-vars-to-js');
 const fs = require('fs');
 const path = require('path');
+const withPlugins = require('next-compose-plugins');
 const withStyles = require('@webdeb/next-styles');
+const withPWA = require('next-pwa');
 const { THEME_VARIABLES } = require('./src/util/configConstants');
 
 const antVariables = lessToJS(
@@ -18,42 +20,60 @@ const modifyVariables = lessToJS(
 );
 const themeVariables = { ...antVariables, ...modifyVariables };
 
-module.exports = withStyles({
-  less: true,
-  modules: true,
-  cssLoaderOptions: {
-    importLoaders: 1,
-    localIdentName: '[local]___[hash:base64:5]',
-  },
-  lessLoaderOptions: {
-    javascriptEnabled: true,
-    modifyVars: modifyVariables,
-  },
-  target: 'serverless',
-  env: {
-    URL: process.env.URL,
-    GOOGLE_ANALYTICS_ID: process.env.GOOGLE_ANALYTICS_ID,
-    THEME_VARIABLES: Object.values(THEME_VARIABLES).reduce(
-      (variables, value) => {
-        variables[value] = themeVariables[value];
-        return variables;
-      },
-      {}
-    ),
-  },
-  images: {
-    deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
-  },
-  async rewrites() {
-    return [
+module.exports = withPlugins(
+  [
+    [
+      withStyles,
       {
-        source: '/sitemap.xml',
-        destination: '/api/sitemap',
+        less: true,
+        modules: true,
+        cssLoaderOptions: {
+          importLoaders: 1,
+          localIdentName: '[local]___[hash:base64:5]',
+        },
+        lessLoaderOptions: {
+          javascriptEnabled: true,
+          modifyVars: modifyVariables,
+        },
       },
+    ],
+    [
+      withPWA,
       {
-        source: '/robots.txt',
-        destination: '/api/robots',
+        pwa: {
+          disable: process.env.NODE_ENV === 'development',
+          dest: 'public',
+        },
       },
-    ];
-  },
-});
+    ],
+  ],
+  {
+    target: 'serverless',
+    env: {
+      URL: process.env.URL,
+      GOOGLE_ANALYTICS_ID: process.env.GOOGLE_ANALYTICS_ID,
+      THEME_VARIABLES: Object.values(THEME_VARIABLES).reduce(
+        (variables, value) => {
+          variables[value] = themeVariables[value];
+          return variables;
+        },
+        {}
+      ),
+    },
+    images: {
+      deviceSizes: [640, 750, 828, 1080, 1200, 1920, 2048],
+    },
+    async rewrites() {
+      return [
+        {
+          source: '/sitemap.xml',
+          destination: '/api/sitemap',
+        },
+        {
+          source: '/robots.txt',
+          destination: '/api/robots',
+        },
+      ];
+    },
+  }
+);

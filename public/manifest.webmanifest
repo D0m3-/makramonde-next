@@ -1,0 +1,36 @@
+{
+  "name": "Makramonde ecommerce",
+  "short_name": "Makramonde",
+  "start_url": "/",
+  "background_color": "#1890ff",
+  "theme_color": "#1890ff",
+  "display": "minimal-ui",
+  "cacheDigest": null,
+  "icons": [
+    {
+      "src": "_next/image?url=%2Fimages%2Fmakramonde-transparent.png&w=48&q=90",
+      "sizes": "48x48",
+      "type": "image/webp"
+    },
+    {
+      "src": "_next/image?url=%2Fimages%2Fmakramonde-transparent.png&w=72&q=90",
+      "sizes": "72x72",
+      "type": "image/webp"
+    },
+    {
+      "src": "_next/image?url=%2Fimages%2Fmakramonde-transparent.png&w=96&q=90",
+      "sizes": "96x96",
+      "type": "image/webp"
+    },
+    {
+      "src": "_next/image?url=%2Fimages%2Fmakramonde-transparent.png&w=144&q=90",
+      "sizes": "144x144",
+      "type": "image/webp"
+    }
+    {
+      "src": "_next/image?url=%2Fimages%2Fmakramonde-bijou.png&w=512&q=90",
+      "sizes": "512x512",
+      "type": "image/webp"
+    }
+  ]
+}
