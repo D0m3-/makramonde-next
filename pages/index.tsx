@@ -13,6 +13,7 @@ import SiteLayout from '../src/layout/layout';
 import Layout from '../src/layout/type/Layout';
 import SEO from '../src/seo/SEO';
 import { IMAGE_SIZES, REVALIDATE_INTERVAL } from '../src/util/constants';
+import contentfulImageLoader from '../src/util/contentfulImageLoader';
 import { getProductSlugFactory } from '../src/util/product';
 
 type Props = {
@@ -36,16 +37,21 @@ const Home = ({ page, layout }: Props) => {
         }}
       />
       <SiteLayout layout={layout} page={page}>
-        <h2>
-          <Image
-            src="/images/makramonde-bijou.png"
-            width="2048"
-            height="1536"
-            layout="responsive"
-            sizes={IMAGE_SIZES}
-            quality={90}
-          />
-        </h2>
+        {page.fields.assets?.length && (
+          <h2>
+            <Image
+              src={page.fields.assets[0].fields.file.url}
+              width="2048"
+              height="1536"
+              layout="responsive"
+              sizes={IMAGE_SIZES}
+              quality={90}
+              alt={`${page.fields.assets[0].fields.description}`}
+              loader={contentfulImageLoader}
+              priority
+            />
+          </h2>
+        )}
         {page.fields.content && documentToReactComponents(page.fields.content)}
         {layout.products.length ? (
           <>
@@ -66,14 +72,19 @@ const Home = ({ page, layout }: Props) => {
             Revenez bientôt pour voir mes nouveautés !
           </p>
         )}
-        <h2>
-          <Image
-            src="/images/assemblage.jpg"
-            width="2048"
-            height="1536"
-            sizes={IMAGE_SIZES}
-          />
-        </h2>
+        {page.fields.assets && page.fields.assets.length > 1 && (
+          <h2>
+            <Image
+              src={page.fields.assets[1].fields.file.url}
+              width="2048"
+              height="1536"
+              layout="responsive"
+              sizes={IMAGE_SIZES}
+              alt={`${page.fields.assets[1].fields.description}`}
+              loader={contentfulImageLoader}
+            />
+          </h2>
+        )}
       </SiteLayout>
     </>
   );

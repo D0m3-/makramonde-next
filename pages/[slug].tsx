@@ -37,6 +37,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
     fetchPage({ slug: params?.slug }),
     fetchLayout(),
   ]);
+
   return {
     props: { page, layout },
     revalidate: REVALIDATE_INTERVAL,

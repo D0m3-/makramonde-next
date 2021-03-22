@@ -1,10 +1,8 @@
-import { loadStripe } from '@stripe/stripe-js';
+import { loadStripe } from '@stripe/stripe-js/pure';
 import { message } from 'antd';
 import { Entry } from 'contentful';
 import fetch from 'unfetch';
 import { IUniqueProductFields } from '../../@types/generated/contentful';
-
-const stripeLoad = loadStripe(process.env.NEXT_PUBLIC_STRIPE_KEY as string);
 
 export const checkout = async (products: Entry<IUniqueProductFields>[]) => {
   try {
@@ -15,7 +13,9 @@ export const checkout = async (products: Entry<IUniqueProductFields>[]) => {
       }),
     });
     const data = await response.json();
-    const stripe = await stripeLoad;
+    const stripe = await loadStripe(
+      process.env.NEXT_PUBLIC_STRIPE_KEY as string
+    );
     if (!stripe) {
       throw new Error('Stripe did not load');
     }
