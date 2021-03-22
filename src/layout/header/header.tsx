@@ -6,6 +6,7 @@ import React, { useState } from 'react';
 import { IUniqueProductFields } from '../../../@types/generated/contentful';
 import CartButton from '../../cart/CartButton';
 import Arrows from '../../product/Arrows';
+import contentfulImageLoader from '../../util/contentfulImageLoader';
 import SiteMenu from '../menu/menu';
 import Layout from '../type/Layout';
 import styles from './header.module.less';
@@ -34,13 +35,19 @@ const SiteHeader = ({
           onCancel={() => setMenuOpen(false)}
           footer={null}
         >
-          <Image
-            src="/images/MAKRA200.png"
-            width="200"
-            height="30"
-            layout="fixed"
-            quality={90}
-          />
+          {layout.navBar.fields.logo && (
+            <Image
+              className={styles.logo}
+              src={layout.navBar.fields.logo.fields.file.url}
+              width="200"
+              height="30"
+              layout="fixed"
+              quality={90}
+              alt={`${layout.navBar.fields.logo.fields.description}`}
+              loader={contentfulImageLoader}
+            />
+          )}
+
           <SiteMenu layout={layout} onSelect={() => setMenuOpen(false)} />
         </Modal>
       </div>

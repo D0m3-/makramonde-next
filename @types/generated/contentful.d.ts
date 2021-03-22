@@ -26,8 +26,14 @@ export interface ICategory extends Entry<ICategoryFields> {
 }
 
 export interface INavBarFields {
+  /** title */
+  title?: string | undefined;
+
   /** Links */
   links?: Entry<{ [fieldId: string]: unknown }>[] | undefined;
+
+  /** Logo */
+  logo?: Asset | undefined;
 }
 
 export interface INavBar extends Entry<INavBarFields> {
@@ -59,6 +65,9 @@ export interface IPageFields {
 
   /** tag */
   tag?: string | undefined;
+
+  /** Assets */
+  assets?: Asset[] | undefined;
 }
 
 export interface IPage extends Entry<IPageFields> {
