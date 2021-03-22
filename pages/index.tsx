@@ -48,6 +48,7 @@ const Home = ({ page, layout }: Props) => {
               quality={90}
               alt={`${page.fields.assets[0].fields.description}`}
               loader={contentfulImageLoader}
+              priority
             />
           </h2>
         )}

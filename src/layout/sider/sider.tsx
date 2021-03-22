@@ -26,6 +26,7 @@ const SiteSider = ({ layout }: Props) => {
                 quality={90}
                 alt={`${layout.navBar.fields.logo.fields.description}`}
                 loader={contentfulImageLoader}
+                priority
               />
             )}
           </a>
