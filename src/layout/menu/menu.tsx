@@ -1,5 +1,6 @@
 import { TagsOutlined } from '@ant-design/icons';
 import { Input, Menu as AntdMenu } from 'antd';
+import Image from 'next/image';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 import React, { useState } from 'react';
@@ -7,6 +8,7 @@ import {
   layoutProductsToCategories,
   layoutToMenu,
 } from '../../transform/layoutTransform';
+import contentfulImageLoader from '../../util/contentfulImageLoader';
 import { getProductSlugFactory } from '../../util/product';
 import Layout from '../type/Layout';
 import styles from './menu.module.less';
@@ -44,6 +46,7 @@ const Menu = ({ layout, onSelect }: Props) => {
         className={styles.menu}
         onClick={onSelect}
         forceSubMenuRender
+        inlineIndent={10}
       >
         {items.map((item) =>
           item.type === 'products' ? (
@@ -62,9 +65,26 @@ const Menu = ({ layout, onSelect }: Props) => {
                   {Object.values(categories[category])
                     .sort()
                     .map((product) => (
-                      <AntdMenu.Item key={getProductSlug(product)}>
+                      <AntdMenu.Item
+                        key={getProductSlug(product)}
+                        icon={
+                          product.fields.images &&
+                          product.fields.images.length && (
+                            <Image
+                              src={product.fields.images[0].fields.file.url}
+                              width={32}
+                              height={32}
+                              layout="fixed"
+                              alt={`${product.fields.images[0].fields.description}`}
+                              loader={contentfulImageLoader}
+                              objectFit="contain"
+                              className={styles.image}
+                            />
+                          )
+                        }
+                      >
                         <Link href={getProductSlug(product)}>
-                          <a>{product.fields.title}</a>
+                          <a className={styles.link}>{product.fields.title}</a>
                         </Link>
                       </AntdMenu.Item>
                     ))}
