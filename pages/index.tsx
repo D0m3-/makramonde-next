@@ -1,5 +1,4 @@
 import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
-import { Button } from 'antd';
 import { Entry } from 'contentful';
 import { GetStaticProps } from 'next';
 import Image from 'next/image';
@@ -12,6 +11,7 @@ import styles from '../src/layout/index.module.less';
 import SiteLayout from '../src/layout/layout';
 import Layout from '../src/layout/type/Layout';
 import SEO from '../src/seo/SEO';
+import { THEME_VARIABLES } from '../src/util/configConstants';
 import { IMAGE_SIZES, REVALIDATE_INTERVAL } from '../src/util/constants';
 import contentfulImageLoader from '../src/util/contentfulImageLoader';
 import { getProductSlugFactory } from '../src/util/product';
@@ -21,6 +21,7 @@ type Props = {
   layout: Layout;
 };
 const Home = ({ page, layout }: Props) => {
+  const getProductSlug = getProductSlugFactory({ layout });
   return (
     <>
       <SEO
@@ -52,26 +53,24 @@ const Home = ({ page, layout }: Props) => {
             />
           </h2>
         )}
-        {page.fields.content && documentToReactComponents(page.fields.content)}
-        {layout.products.length ? (
-          <>
-            <p>Pour voir mes dernières créations, c'est par ici :</p>
-            <div className={styles.explore}>
-              <Button type="primary" size="large">
-                <Link
-                  href={getProductSlugFactory({ layout })(layout.products[0])}
-                >
-                  <a>Explorer</a>
-                </Link>
-              </Button>
-            </div>
-          </>
-        ) : (
-          <p>
-            Je n'ai actuellement aucune création à vous proposer en ligne.
-            Revenez bientôt pour voir mes nouveautés !
-          </p>
+        <Products
+          layout={layout}
+          getProductSlug={getProductSlug}
+          start={0}
+          end={3}
+        />
+
+        {page.fields.content && (
+          <div className={styles.content}>
+            {documentToReactComponents(page.fields.content)}
+          </div>
         )}
+        <Products
+          layout={layout}
+          getProductSlug={getProductSlug}
+          start={3}
+          end={6}
+        />
         {page.fields.assets && page.fields.assets.length > 1 && (
           <h2>
             <Image
@@ -97,5 +96,47 @@ export const getStaticProps: GetStaticProps = async (context) => {
     revalidate: REVALIDATE_INTERVAL,
   };
 };
+
+const PRODUCTS_IMAGE_SIZES = `(min-width: ${
+  process.env.THEME_VARIABLES?.[THEME_VARIABLES.SCREEN_MD]
+}) 15vw, 33vw`;
+
+const Products = ({
+  layout,
+  start,
+  end,
+  getProductSlug,
+}: {
+  layout: Layout;
+  start: number;
+  end: number;
+  getProductSlug: ReturnType<typeof getProductSlugFactory>;
+}) => (
+  <div className={styles.products}>
+    {layout.products.slice(start, end).map((product) => {
+      if (!product.fields.images || !product.fields.images.length) {
+        return null;
+      }
+      const image = product.fields.images[0];
+      return (
+        <div key={getProductSlug(product)} className={styles.productContainer}>
+          <Link href={getProductSlug(product)}>
+            <a className={styles.product}>
+              <Image
+                src={image.fields.file.url}
+                layout="fill"
+                alt={`${image.fields.description}`}
+                loader={contentfulImageLoader}
+                objectFit="contain"
+                priority
+                sizes={PRODUCTS_IMAGE_SIZES}
+              />
+            </a>
+          </Link>
+        </div>
+      );
+    })}
+  </div>
+);
 
 export default Home;

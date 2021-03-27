@@ -11,6 +11,7 @@ import { CartContext } from '../cart/CartContext';
 import { THEME_VARIABLES } from '../util/configConstants';
 import { IMAGE_SIZES } from '../util/constants';
 import contentfulImageLoader from '../util/contentfulImageLoader';
+import { getImageDimensions } from '../util/image';
 import { formatPrice } from '../util/price';
 import styles from './Product.module.less';
 
@@ -100,19 +101,6 @@ const Product = ({ product }: { product: Entry<IUniqueProductFields> }) => {
       </Modal>
     </div>
   );
-};
-
-const getImageDimensions = (image?: Asset) => {
-  if (!image || !image.fields.file.details.image) {
-    return { width: 100, height: 100 };
-  }
-  const {
-    width: imageWidth,
-    height: imageHeight,
-  } = image.fields.file.details.image;
-  const width = Math.min(imageWidth, 2048);
-  const height = (imageHeight / imageWidth) * width;
-  return { width, height };
 };
 
 export default Product;
