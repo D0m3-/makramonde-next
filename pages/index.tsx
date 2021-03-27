@@ -119,7 +119,7 @@ const Products = ({
       }
       const image = product.fields.images[0];
       return (
-        <div className={styles.productContainer}>
+        <div key={getProductSlug(product)} className={styles.productContainer}>
           <Link href={getProductSlug(product)}>
             <a className={styles.product}>
               <Image
