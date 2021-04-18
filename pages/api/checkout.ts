@@ -66,7 +66,7 @@ async function createCheckout({
   });
   // create a session
   const session = await stripe.checkout.sessions.create({
-    success_url: `${origin}/success/`,
+    success_url: `${origin}/success/?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: referer || '',
     payment_method_types: ['card'],
     line_items: items,

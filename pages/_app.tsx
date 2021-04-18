@@ -18,7 +18,11 @@ window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
 
-  gtag('config', '${GA_MEASUREMENT_ID}');
+  gtag('config', '${GA_MEASUREMENT_ID}', { 'anonymize_ip': true });
+  gtag('consent', 'default', {
+  'ad_storage': 'denied',
+  'analytics_storage': 'denied'
+});
 `,
           }}
         ></script>
