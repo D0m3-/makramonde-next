@@ -1,11 +1,18 @@
 import { documentToPlainTextString } from '@contentful/rich-text-plain-text-renderer';
+import { documentToReactComponents } from '@contentful/rich-text-react-renderer';
 import { Entry } from 'contentful';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
-import { IUniqueProductFields } from '../../@types/generated/contentful';
 import {
+  IPageFields,
+  IUniqueProductFields,
+} from '../../@types/generated/contentful';
+import {
+  fetchBlogHome,
+  fetchBlogPages,
   fetchLayout,
+  fetchPage,
   fetchProductBySlug,
   fetchProductPages,
   fetchProducts,
@@ -20,13 +27,32 @@ import { formatPrice } from '../../src/util/price';
 import { getProductSlug } from '../../src/util/product';
 
 const ProductPage = ({
+  page,
   product,
   layout,
 }: {
-  product: Entry<IUniqueProductFields>;
+  page?: Entry<IPageFields>;
+  product?: Entry<IUniqueProductFields>;
   layout: Layout;
 }) => {
   const router = useRouter();
+
+  if (page) {
+    return (
+      <>
+        <SEO title={page?.fields.title} />
+        <SiteLayout layout={layout} page={page}>
+          {page.fields.content &&
+            documentToReactComponents(page.fields.content)}
+        </SiteLayout>
+      </>
+    );
+  }
+
+  if (!product) {
+    return null;
+  }
+
   const plainDescription = documentToPlainTextString(
     product.fields.description
   );
@@ -76,39 +102,86 @@ const ProductPage = ({
   );
 };
 
-export const getStaticPaths: GetStaticPaths = async () => {
+const getProductStaticPaths = async () => {
   const [{ productPages }, { products }] = await Promise.all([
     fetchProductPages(),
     fetchProducts(),
   ]);
   const slugs = productPages.map((page) => page.fields.slug);
   const productSlugs = products.map(getProductSlug);
-  const paths = slugs.reduce<{ params: { slug: string; product: string } }[]>(
+  const paths = slugs.reduce<{ params: { slug: string; subSlug: string } }[]>(
     (paths, slug) =>
       paths.concat(
         productSlugs.map((product) => ({
           params: {
             slug,
-            product,
+            subSlug: product,
+            type: 'product',
           },
         }))
       ),
     []
   );
+  return paths;
+};
+
+const getBlogStaticPaths = async () => {
+  const [blogHomePage, { blogPages }] = await Promise.all([
+    fetchBlogHome(),
+    fetchBlogPages(),
+  ]);
+
+  if (!blogHomePage) {
+    return [];
+  }
+
+  const slug = blogHomePage.fields.slug;
+  const blogs = blogPages.map((blogPage) => blogPage.fields.slug);
+  return blogs.map((blog) => ({
+    params: {
+      slug,
+      subSlug: blog,
+      type: 'blog',
+    },
+  }));
+};
+
+export const getStaticPaths: GetStaticPaths = async () => {
+  const productPaths = await getProductStaticPaths();
+  const blogPaths = await getBlogStaticPaths();
   return {
-    paths,
+    paths: productPaths.concat(blogPaths),
     fallback: false,
   };
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
+  if (params?.type === 'blog') {
+  }
+
   const [{ product }, layout] = await Promise.all([
-    fetchProductBySlug({ slug: params?.product }),
+    fetchProductBySlug({ slug: params?.subSlug }),
     fetchLayout(),
   ]);
 
+  if (product) {
+    return {
+      props: { product, layout },
+      revalidate: REVALIDATE_INTERVAL,
+    };
+  }
+
+  const { page } = await fetchPage({ slug: params?.subSlug });
+
+  if (!page) {
+    return {
+      notFound: true,
+      revalidate: REVALIDATE_INTERVAL,
+    };
+  }
+
   return {
-    props: { product, layout },
+    props: { page, layout },
     revalidate: REVALIDATE_INTERVAL,
   };
 };
