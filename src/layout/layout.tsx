@@ -1,4 +1,5 @@
-import { Alert, Col, Layout, Row } from 'antd';
+import { QuestionCircleOutlined } from '@ant-design/icons';
+import { Alert, Col, Layout, Row, Tooltip } from 'antd';
 import { Entry } from 'contentful';
 import React, { ReactNode } from 'react';
 import {
@@ -78,7 +79,12 @@ const SiteLayout = ({ children, layout, page, product, pageTitle }: Props) => {
             </Row>
           </Content>
           <Footer className={styles.footer}>
-            © Oriane Bernard {new Date().getFullYear()}. Tous droits réservés.
+            © Oriane Bernard {new Date().getFullYear()}. Tous droits réservés.{' '}
+            <Tooltip title="Makramonde n'utilise et ne collecte que les cookies et données personelles nécessaires aux traitement des achats.">
+              <i>
+                RGPD <QuestionCircleOutlined />
+              </i>
+            </Tooltip>
           </Footer>
         </Layout>
       </Layout>

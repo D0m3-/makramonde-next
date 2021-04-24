@@ -4,11 +4,13 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
+    "check:types": "tsc -p tsconfig.json",
     "build": "next build",
     "start": "next start",
     "contentful": "contentful",
     "contentful:migration": "ts-node node_modules/contentful-cli/bin/contentful.js space migration",
-    "contentful:generate:types": "contentful-typescript-codegen --output @types/generated/contentful.d.ts"
+    "contentful:generate:types": "contentful-typescript-codegen --output @types/generated/contentful.d.ts",
+    "prepare": "husky install"
   },
   "dependencies": {
     "@ant-design/icons": "^4.4.0",
@@ -40,6 +42,7 @@
     "contentful-migration": "^4.0.7",
     "contentful-typescript-codegen": "^3.2.1",
     "dotenv": "^8.2.0",
+    "husky": "^6.0.0",
     "null-loader": "^4.0.1",
     "slugify": "^1.4.7",
     "ts-node": "^9.1.1",

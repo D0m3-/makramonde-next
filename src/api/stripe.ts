@@ -3,6 +3,7 @@ import { message } from 'antd';
 import { Entry } from 'contentful';
 import fetch from 'unfetch';
 import { IUniqueProductFields } from '../../@types/generated/contentful';
+import { GAPurchase } from '../util/tracking';
 
 export const checkout = async (products: Entry<IUniqueProductFields>[]) => {
   try {
@@ -22,7 +23,6 @@ export const checkout = async (products: Entry<IUniqueProductFields>[]) => {
     const result = await stripe.redirectToCheckout({
       sessionId: data.id,
     });
-    console.log(result);
     if (result.error) {
       onError(result.error);
     }
@@ -37,4 +37,20 @@ const onError = (error) => {
     'Désolé, il y a eu un problème, veuillez réessayer plus tard...'
   );
   console.warn(error.message);
+};
+
+export const getCheckout = async (sessionId: string) => {
+  try {
+    const response = await fetch('/api/getCheckout', {
+      method: 'POST',
+      body: JSON.stringify({
+        sessionId,
+      }),
+    });
+    return (await response.json()) as {
+      purchaseEvent: GAPurchase;
+    };
+  } catch (error) {
+    console.error(error);
+  }
 };

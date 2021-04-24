@@ -64,7 +64,7 @@ export interface IPageFields {
   content?: Document | undefined;
 
   /** tag */
-  tag?: string | undefined;
+  tag?: "home" | "content" | "products" | "blog home" | "blog" | undefined;
 
   /** Assets */
   assets?: Asset[] | undefined;

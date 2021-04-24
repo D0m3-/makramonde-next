@@ -25,6 +25,25 @@ export const fetchContentPages = async () => {
   return { contentPages: entries.items };
 };
 
+export const fetchBlogHome = async () => {
+  const entries = await client.getEntries<IPageFields>({
+    content_type: 'page',
+    'fields.tag': 'blog home',
+  });
+  if (!entries.items.length) {
+    return;
+  }
+  return entries.items[0];
+};
+
+export const fetchBlogPages = async () => {
+  const entries = await client.getEntries<IPageFields>({
+    content_type: 'page',
+    'fields.tag': 'blog',
+  });
+  return { blogPages: entries.items };
+};
+
 export const fetchProductPages = async () => {
   const entries = await client.getEntries<IPageFields>({
     content_type: 'page',
