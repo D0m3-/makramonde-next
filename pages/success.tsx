@@ -17,7 +17,7 @@ const SuccessPage = ({ layout }: { layout: Layout }) => {
       if (sessionId) {
         const checkout = await getCheckout(sessionId as string);
         if (checkout) {
-          gtag('event', 'purchase', checkout.purchaseEvent);
+          window.gtag('event', 'purchase', checkout.purchaseEvent);
           console.log('event', 'purchase', checkout.purchaseEvent);
         }
       }
