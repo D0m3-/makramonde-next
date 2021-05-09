@@ -5,6 +5,7 @@ import {
   IUniqueProductFields,
 } from '../../@types/generated/contentful';
 import { getProductSlug } from '../util/product';
+import transformLayout from './transformLayout';
 
 const environment =
   process.env.NEXT_PUBLIC_STRIPE_ENV === 'test' ? 'test' : 'master';
@@ -67,7 +68,7 @@ export const fetchLayout = async () => {
     }),
     fetchProducts(),
   ]);
-  return { navBar: entries.items[0], products };
+  return transformLayout({ navBar: entries.items[0], products });
 };
 
 export const fetchProducts = async () => {

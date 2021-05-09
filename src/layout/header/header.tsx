@@ -35,15 +35,15 @@ const SiteHeader = ({
           onCancel={() => setMenuOpen(false)}
           footer={null}
         >
-          {layout.navBar.fields.logo && (
+          {layout.navBar.logo.url && (
             <Image
               className={styles.logo}
-              src={layout.navBar.fields.logo.fields.file.url}
+              src={layout.navBar.logo.url}
               width="200"
               height="30"
               layout="fixed"
               quality={90}
-              alt={`${layout.navBar.fields.logo.fields.description}`}
+              alt={`${layout.navBar.logo.description}`}
               loader={contentfulImageLoader}
             />
           )}

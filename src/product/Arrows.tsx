@@ -5,7 +5,6 @@ import Link from 'next/link';
 import React from 'react';
 import { IUniqueProductFields } from '../../@types/generated/contentful';
 import Layout from '../layout/type/Layout';
-import { getProductSlugFactory } from '../util/product';
 import styles from './Arrows.module.less';
 
 const Arrow = ({
@@ -46,9 +45,8 @@ const Arrows = ({
   if (!product) {
     return children || null;
   }
-  const getProductSlug = getProductSlugFactory({ layout });
   const productIndex = layout.products.findIndex(
-    (p) => product.sys.id === p.sys.id
+    (p) => product.sys.id === p.id
   );
   const previousProduct =
     layout.products[(productIndex || layout.products.length) - 1];
@@ -59,13 +57,13 @@ const Arrows = ({
     <>
       <div className={(floating && styles.arrowLeft) || className}>
         <div className={floating ? styles.arrowFloater : styles.arrowSpacing}>
-          <Arrow url={getProductSlug(previousProduct)} direction="left" />
+          <Arrow url={previousProduct.slug} direction="left" />
         </div>
       </div>
       {children}
       <div className={(floating && styles.arrowRight) || className}>
         <div className={floating ? styles.arrowFloater : styles.arrowSpacing}>
-          <Arrow url={getProductSlug(nextProduct)} direction="right" />
+          <Arrow url={nextProduct.slug} direction="right" />
         </div>
       </div>
     </>

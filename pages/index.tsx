@@ -14,14 +14,12 @@ import SEO from '../src/seo/SEO';
 import { THEME_VARIABLES } from '../src/util/configConstants';
 import { IMAGE_SIZES, REVALIDATE_INTERVAL } from '../src/util/constants';
 import contentfulImageLoader from '../src/util/contentfulImageLoader';
-import { getProductSlugFactory } from '../src/util/product';
 
 type Props = {
   page: Entry<IPageFields>;
   layout: Layout;
 };
 const Home = ({ page, layout }: Props) => {
-  const getProductSlug = getProductSlugFactory({ layout });
   return (
     <>
       <SEO
@@ -53,24 +51,14 @@ const Home = ({ page, layout }: Props) => {
             />
           </h2>
         )}
-        <Products
-          layout={layout}
-          getProductSlug={getProductSlug}
-          start={0}
-          end={3}
-        />
+        <Products layout={layout} start={0} end={3} />
 
         {page.fields.content && (
           <div className={styles.content}>
             {documentToReactComponents(page.fields.content)}
           </div>
         )}
-        <Products
-          layout={layout}
-          getProductSlug={getProductSlug}
-          start={3}
-          end={6}
-        />
+        <Products layout={layout} start={3} end={6} />
         {page.fields.assets && page.fields.assets.length > 1 && (
           <h2>
             <Image
@@ -105,27 +93,24 @@ const Products = ({
   layout,
   start,
   end,
-  getProductSlug,
 }: {
   layout: Layout;
   start: number;
   end: number;
-  getProductSlug: ReturnType<typeof getProductSlugFactory>;
 }) => (
   <div className={styles.products}>
     {layout.products.slice(start, end).map((product) => {
-      if (!product.fields.images || !product.fields.images.length) {
+      if (!product.image) {
         return null;
       }
-      const image = product.fields.images[0];
       return (
-        <div key={getProductSlug(product)} className={styles.productContainer}>
-          <Link href={getProductSlug(product)}>
+        <div key={product.slug} className={styles.productContainer}>
+          <Link href={product.slug}>
             <a className={styles.product}>
               <Image
-                src={image.fields.file.url}
+                src={product.image.url}
                 layout="fill"
-                alt={`${image.fields.description}`}
+                alt={`${product.image.description}`}
                 loader={contentfulImageLoader}
                 objectFit="contain"
                 priority
