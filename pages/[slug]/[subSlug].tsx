@@ -19,6 +19,7 @@ import {
 } from '../../src/api/contentful';
 import config from '../../src/config';
 import SiteLayout from '../../src/layout/layout';
+import Spinner from '../../src/layout/Spinner';
 import Layout from '../../src/layout/type/Layout';
 import Product from '../../src/product/Product';
 import SEO from '../../src/seo/SEO';
@@ -36,6 +37,14 @@ const ProductPage = ({
   layout: Layout;
 }) => {
   const router = useRouter();
+
+  if (router.isFallback) {
+    return (
+      <div style={{ margin: 'auto' }}>
+        <Spinner />
+      </div>
+    );
+  }
 
   if (page) {
     return (
@@ -151,14 +160,11 @@ export const getStaticPaths: GetStaticPaths = async () => {
   const blogPaths = await getBlogStaticPaths();
   return {
     paths: productPaths.concat(blogPaths),
-    fallback: false,
+    fallback: true,
   };
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  if (params?.type === 'blog') {
-  }
-
   const [{ product }, layout] = await Promise.all([
     fetchProductBySlug({ slug: params?.subSlug }),
     fetchLayout(),
