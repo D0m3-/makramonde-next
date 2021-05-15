@@ -3,6 +3,7 @@ import { Card } from 'antd';
 import { Entry } from 'contentful';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import Link from 'next/link';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { IPageFields } from '../@types/generated/contentful';
 import {
@@ -13,6 +14,7 @@ import {
   fetchPage,
 } from '../src/api/contentful';
 import SiteLayout from '../src/layout/layout';
+import Spinner from '../src/layout/Spinner';
 import Layout from '../src/layout/type/Layout';
 import SEO from '../src/seo/SEO';
 import { REVALIDATE_INTERVAL } from '../src/util/constants';
@@ -26,6 +28,14 @@ type Props = {
 };
 
 const Page = ({ page, layout, extra }: Props) => {
+  const router = useRouter();
+  if (router.isFallback) {
+    return (
+      <div style={{ margin: 'auto' }}>
+        <Spinner />
+      </div>
+    );
+  }
   if (page.fields.tag === 'blog home') {
     return (
       <>
@@ -70,7 +80,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
   }
   return {
     paths,
-    fallback: false,
+    fallback: true,
   };
 };
 
@@ -79,6 +89,14 @@ export const getStaticProps: GetStaticProps<Props> = async ({ params }) => {
     fetchPage({ slug: params?.slug }),
     fetchLayout(),
   ]);
+
+  if (!page) {
+    return {
+      notFound: true,
+      revalidate: REVALIDATE_INTERVAL,
+    };
+  }
+
   const extra: Props['extra'] = {};
 
   if (page.fields.tag === 'blog home') {
